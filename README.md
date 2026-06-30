@@ -66,16 +66,22 @@ Ejemplos implementados
 🔄 Flujo general del sistema
 
 Cliente
+
     ↓
 Controller
+
     ↓
 Application Service
+
     ↓
 Domain
+
     ↓
 Repository
+
     ↓
 Infrastructure
+
     ↓
 Base de Datos
 
