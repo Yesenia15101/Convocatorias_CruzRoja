@@ -1,4 +1,4 @@
-##Cruz Roja Peruana Filial Arequipa##
+Cruz Roja Peruana Filial Arequipa
 
 Sistema de gestión de voluntarios, convocatorias e inscripciones desarrollado para la Cruz Roja Peruana Filial Arequipa, utilizando principios de Domain Driven Design (DDD) y arquitectura por capas.
 
