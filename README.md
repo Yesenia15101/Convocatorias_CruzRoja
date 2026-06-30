@@ -98,9 +98,6 @@ Ejemplo de proceso
 🛠️ Tecnologías utilizadas
 
 - Java
-- Spring Boot
-- Maven
-- JPA / Hibernate
 - Domain Driven Design (DDD)
 - Arquitectura por capas
 
