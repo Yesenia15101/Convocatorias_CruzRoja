@@ -25,8 +25,11 @@ El proyecto se encuentra organizado mediante Bounded Contexts (BC) y una arquite
 Bounded Contexts
 
 Contexto| Responsabilidad
+
 BC1 - Usuarios| Gestión de voluntarios y postulaciones
+
 BC2 - Convocatorias| Administración de convocatorias y requisitos
+
 BC3 - Inscripciones| Gestión de inscripciones a convocatorias
 
 Capas
