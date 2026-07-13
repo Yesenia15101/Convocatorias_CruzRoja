@@ -18,6 +18,9 @@ La arquitectura fue diseñada siguiendo los principios de Domain Driven Design (
 
 ---
 
+<img width="8632" height="6327" alt="ClassDiagram1_open" src="https://github.com/user-attachments/assets/98c8ce64-c847-45c6-8255-27e08b293ca1" />
+
+---
 🏗️ Arquitectura
 
 El proyecto se encuentra organizado mediante Bounded Contexts (BC) y una arquitectura por capas.
