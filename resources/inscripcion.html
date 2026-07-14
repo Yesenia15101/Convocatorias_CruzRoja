@@ -7,7 +7,7 @@
 
   <style>
 
-    /* ===================== ESTILOS GENERALES ===================== */
+
 
     * {
       margin: 0;
@@ -85,7 +85,7 @@
       color: #e30613;
     }
 
-    /* ===================== SECCIÓN PRINCIPAL (HERO) ===================== */
+    /* ===================== SECCIÓN PRINCIPAL ===================== */
 
     .hero {
       background-color: #e30613;
@@ -116,7 +116,7 @@
       margin-bottom: 30px;
     }
 
-    /* ===================== LISTA DE CONVOCATORIAS (TARJETAS) ===================== */
+    /* ===================== LISTA DE CONVOCATORIAS ===================== */
 
     .lista-convocatorias {
       max-width: 800px;
@@ -454,16 +454,15 @@
       }
     ];
 
-    // Aquí se van guardando las inscripciones ya registradas 
+
     const inscripcionesRegistradas = [];
 
-    // Convocatoria que el usuario está viendo en el detalle
     let convocatoriaSeleccionada = null;
 
 
-    /* =================================================================
-       2. MOSTRAR LA LISTA DE CONVOCATORIAS
-    ================================================================= */
+
+      // 2. MOSTRAR LA LISTA DE CONVOCATORIAS
+
 
     function mostrarListaConvocatorias() {
       const contenedorLista = document.getElementById("listaConvocatorias");
@@ -496,7 +495,7 @@
         return c.id === id;
       });
 
-      // Rellenamos los datos del detalle
+  
       document.getElementById("detalleTitulo").textContent = convocatoriaSeleccionada.titulo;
       document.getElementById("detalleDescripcion").textContent = convocatoriaSeleccionada.descripcion;
       document.getElementById("detalleArea").textContent = convocatoriaSeleccionada.area;
@@ -523,7 +522,7 @@
       document.getElementById("inputDni").value = "";
       document.getElementById("btnInscribirme").disabled = false;
 
-      // Cambiamos de vista: ocultamos la lista y mostramos el detalle
+      // Cambiamos de vista:
       document.getElementById("vista-lista").classList.add("oculto");
       document.getElementById("vista-detalle").classList.remove("oculto");
       window.scrollTo(0, 0);
@@ -546,7 +545,7 @@
 
     document.getElementById("btnInscribirme").addEventListener("click", function () {
 
-      // 5.1 Verificar que todos los requisitos estén marcados
+      //  Verificar que todos los requisitos estén marcados
       const casillasRequisitos = document.querySelectorAll("#listaRequisitos input[type='checkbox']");
       const todosMarcados = Array.from(casillasRequisitos).every(function (casilla) {
         return casilla.checked;
@@ -569,9 +568,8 @@
         document.getElementById("avisoDni").style.display = "none";
       }
 
-      // 5.3 Registrar la inscripción en el sistema
-      // (En un sistema real, aquí se enviaría esta información a un servidor
-      // con fetch(), para guardarla en la base de datos)
+      // 3Registrar la inscripción en el sistema
+
       const nuevaInscripcion = {
         dni: dni,
         convocatoriaId: convocatoriaSeleccionada.id,
@@ -584,7 +582,7 @@
       console.log("Inscripción registrada:", nuevaInscripcion);
       console.log("Todas las inscripciones:", inscripcionesRegistradas);
 
-      // 5.4 Mostrar mensaje de confirmación y desactivar el botón
+      //  Mostrar mensaje de confirmación y desactivar el botón
       const mensaje = document.getElementById("mensajeConfirmacion");
       mensaje.textContent = "Inscripción registrada correctamente para el DNI " + dni + " en la convocatoria \"" + convocatoriaSeleccionada.titulo + "\".";
       mensaje.style.display = "block";
