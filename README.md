@@ -68,27 +68,7 @@ Ejemplos implementados
 
 🔄 Flujo general del sistema
 
-Cliente
-
-    ↓
-Controller
-
-    ↓
-Application Service
-
-    ↓
-Domain
-
-    ↓
-Repository
-
-    ↓
-Infrastructure
-
-    ↓
-Base de Datos
-
-Ejemplo de proceso
+Cliente -> Controller -> Application Service -> Domain -> Repository -> Infrastructure -> Base de Datos -> Ejemplo de proceso
 
 1. El voluntario realiza una inscripción.
 2. El controlador recibe la solicitud.
@@ -110,7 +90,7 @@ Ejemplo de proceso
 
 Clonar el repositorio
 
-git clone https://github.com/usuario/cruz-roja-peruana.git
+git clone [https://github.com/Yesenia15101/cruz-roja-peruana.git](https://github.com/Yesenia15101/Convocatorias_CruzRoja.git)
 cd cruz-roja-peruana
 
 Compilar el proyecto
