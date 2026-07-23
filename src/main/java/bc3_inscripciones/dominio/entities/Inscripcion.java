@@ -2,6 +2,7 @@ package bc3_inscripciones.dominio.entities;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.time.ZoneId;
 
 import bc3_inscripciones.dominio.enums.EstadoInscripcion;
 
@@ -29,7 +30,7 @@ public class Inscripcion {
         this.id = id;
         this.dniVoluntario = dniVoluntario;
         this.convocatoriaId = convocatoriaId;
-        this.fechaInscripcion = LocalDateTime.now(ZoneId.systemDefault());
+        this.fechaInscripcion = LocalDateTime.now();
         this.estado = EstadoInscripcion.PENDIENTE;
     }
 

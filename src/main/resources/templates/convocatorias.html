@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Convocatorias Disponibles</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Montserrat,sans-serif;
+    background:#f5f5f5;
+    color:#333;
+}
+
+/* ENCABEZADO */
+
+header{
+    background:#d71920;
+    color:white;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.2);
+}
+
+header h1{
+    font-size:34px;
+}
+
+header p{
+    margin-top:10px;
+    opacity:.95;
+}
+
+/* CONTENEDOR */
+
+.container{
+
+    width:90%;
+    max-width:1300px;
+    margin:auto;
+    padding:45px 0;
+
+}
+
+/* GRID */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+    gap:30px;
+
+}
+
+/* TARJETAS */
+
+.card{
+
+    background:white;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.10);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 14px 30px rgba(0,0,0,.18);
+
+}
+
+.card-header{
+
+    background:#d71920;
+
+    color:white;
+
+    padding:18px;
+
+}
+
+.card-header h2{
+
+    font-size:22px;
+
+}
+
+.card-body{
+
+    padding:22px;
+
+}
+
+.info{
+
+    display:flex;
+
+    align-items:center;
+
+    margin:14px 0;
+
+    font-size:15px;
+
+}
+
+.icon{
+
+    width:30px;
+
+    font-size:18px;
+
+}
+
+.estado{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:8px 16px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+}
+
+.disponible{
+
+    background:#dff5df;
+
+    color:#1b7a1b;
+
+}
+
+.lleno{
+
+    background:#ffdada;
+
+    color:#b10000;
+
+}
+
+.card-footer{
+
+    padding:20px;
+
+    border-top:1px solid #eee;
+
+}
+
+button{
+
+    width:100%;
+
+    padding:13px;
+
+    border:none;
+
+    background:#d71920;
+
+    color:white;
+
+    font-weight:bold;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#b51319;
+
+}
+
+</style>
+
+</head>
+<body>
+
+<header>
+
+<h1>Convocatorias Disponibles</h1>
+
+<p>Inscríbete como voluntario en las campañas de la Cruz Roja Peruana</p>
+
+</header>
+
+<div class="container">
+
+<div class="grid">
+
+<!-- Convocatoria 1 -->
+
+<div class="card">
+
+<div class="card-header">
+
+<h2>Campaña de Donación de Sangre</h2>
+
+</div>
+
+<div class="card-body">
+
+<div class="info">
+<div class="icon">📍</div>
+<div>Arequipa - Cercado</div>
+</div>
+
+<div class="info">
+<div class="icon">📅</div>
+<div>25 Julio 2026</div>
+</div>
+
+<div class="info">
+<div class="icon">🕒</div>
+<div>08:00 - 14:00</div>
+</div>
+
+<div class="info">
+<div class="icon">👥</div>
+<div>42 registrados</div>
+</div>
+
+<span class="estado disponible">
+Disponible
+</span>
+
+</div>
+
+<div class="card-footer">
+
+<button>Ver convocatoria</button>
+
+</div>
+
+</div>
+
+<!-- Convocatoria 2 -->
+
+<div class="card">
+
+<div class="card-header">
+
+<h2>Apoyo en Emergencias</h2>
+
+</div>
+
+<div class="card-body">
+
+<div class="info">
+<div class="icon">📍</div>
+<div>Camaná</div>
+</div>
+
+<div class="info">
+<div class="icon">📅</div>
+<div>28 Julio 2026</div>
+</div>
+
+<div class="info">
+<div class="icon">🕒</div>
+<div>07:30 - 17:00</div>
+</div>
+
+<div class="info">
+<div class="icon">👥</div>
+<div>61 registrados</div>
+</div>
+
+<span class="estado disponible">
+Disponible
+</span>
+
+</div>
+
+<div class="card-footer">
+
+<button>Ver convocatoria</button>
+
+</div>
+
+</div>
+
+<!-- Convocatoria 3 -->
+
+<div class="card">
+
+<div class="card-header">
+
+<h2>Capacitación en Primeros Auxilios</h2>
+
+</div>
+
+<div class="card-body">
+
+<div class="info">
+<div class="icon">📍</div>
+<div>Yanahuara</div>
+</div>
+
+<div class="info">
+<div class="icon">📅</div>
+<div>30 Julio 2026</div>
+</div>
+
+<div class="info">
+<div class="icon">🕒</div>
+<div>09:00 - 13:00</div>
+</div>
+
+<div class="info">
+<div class="icon">👥</div>
+<div>80 registrados</div>
+</div>
+
+<span class="estado lleno">
+Cupos completos
+</span>
+
+</div>
+
+<div class="card-footer">
+
+<button disabled style="background:#999;cursor:not-allowed;">
+Sin cupos
+</button>
+
+</div>
+
+</div>
+
+<!-- Convocatoria 4 -->
+
+<div class="card">
+
+<div class="card-header">
+
+<h2>Campaña Médica Comunitaria</h2>
+
+</div>
+
+<div class="card-body">
+
+<div class="info">
+<div class="icon">📍</div>
+<div>Cerro Colorado</div>
+</div>
+
+<div class="info">
+<div class="icon">📅</div>
+<div>05 Agosto 2026</div>
+</div>
+
+<div class="info">
+<div class="icon">🕒</div>
+<div>08:30 - 15:00</div>
+</div>
+
+<div class="info">
+<div class="icon">👥</div>
+<div>19 registrados</div>
+</div>
+
+<span class="estado disponible">
+Disponible
+</span>
+
+</div>
+
+<div class="card-footer">
+
+<button>Ver convocatoria</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

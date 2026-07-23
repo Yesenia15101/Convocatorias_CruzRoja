@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Perfil del Voluntario</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --rojo:#d71920;
+    --rojo-oscuro:#b51319;
+    --fondo:#f5f5f5;
+    --texto:#333;
+    --borde:#e7e7e7;
+    --blanco:#fff;
+    --verde:#1b7a1b;
+    --verde-fondo:#dff5df;
+    --amarillo:#946400;
+    --amarillo-fondo:#fff1c2;
+    --azul:#185e9d;
+    --azul-fondo:#dceeff;
+    --gris:#676767;
+    --gris-fondo:#ececec;
+}
+
+body{
+    font-family:Montserrat,sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+    min-height:100vh;
+}
+
+button,
+input,
+select{
+    font-family:Montserrat,sans-serif;
+}
+
+/* ENCABEZADO */
+
+header{
+    background:var(--rojo);
+    color:white;
+    padding:26px 5%;
+    box-shadow:0 3px 8px rgba(0,0,0,.2);
+}
+
+.header-content{
+    width:100%;
+    max-width:1400px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+}
+
+.brand h1{
+    font-size:30px;
+}
+
+.brand p{
+    margin-top:7px;
+    opacity:.95;
+}
+
+.user-menu{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:white;
+    color:var(--rojo);
+    display:grid;
+    place-items:center;
+    font-weight:700;
+    font-size:18px;
+}
+
+.user-data strong{
+    display:block;
+}
+
+.user-data span{
+    display:block;
+    font-size:13px;
+    margin-top:3px;
+    opacity:.9;
+}
+
+/* CONTENEDOR */
+
+.container{
+    width:92%;
+    max-width:1400px;
+    margin:auto;
+    padding:36px 0 55px;
+}
+
+/* PERFIL */
+
+.profile-card{
+    background:white;
+    border-radius:14px;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    padding:24px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:22px;
+    align-items:center;
+    margin-bottom:26px;
+}
+
+.profile-avatar{
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    background:#ffe6e7;
+    color:var(--rojo);
+    display:grid;
+    place-items:center;
+    font-size:28px;
+    font-weight:700;
+}
+
+.profile-info h2{
+    font-size:24px;
+}
+
+.profile-info p{
+    color:#666;
+    margin-top:7px;
+    font-size:14px;
+}
+
+.profile-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px 20px;
+    margin-top:13px;
+    font-size:13px;
+    color:#555;
+}
+
+.edit-btn{
+    border:1px solid var(--rojo);
+    background:white;
+    color:var(--rojo);
+    padding:11px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.25s;
+}
+
+.edit-btn:hover{
+    background:var(--rojo);
+    color:white;
+}
+
+/* NAVEGACIÓN */
+
+.tabs{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.tab-btn{
+    border:none;
+    padding:12px 18px;
+    border-radius:9px;
+    background:white;
+    color:#555;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+
+.tab-btn.active{
+    background:var(--rojo);
+    color:white;
+}
+
+.tab-panel{
+    display:none;
+}
+
+.tab-panel.active{
+    display:block;
+}
+
+/* RESUMEN */
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(170px,1fr));
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.summary-card{
+    background:white;
+    border-radius:13px;
+    padding:21px;
+    box-shadow:0 7px 17px rgba(0,0,0,.07);
+    border-left:5px solid var(--rojo);
+}
+
+.summary-card span{
+    display:block;
+    color:#666;
+    font-size:13px;
+    font-weight:600;
+}
+
+.summary-card strong{
+    display:block;
+    color:var(--rojo);
+    font-size:28px;
+    margin-top:8px;
+}
+
+/* SECCIONES */
+
+.section-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.section-heading h2{
+    font-size:24px;
+}
+
+.section-heading p{
+    color:#666;
+    margin-top:6px;
+    font-size:14px;
+}
+
+.filter-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.filter-row input,
+.filter-row select{
+    padding:11px 12px;
+    border:1px solid #d8d8d8;
+    border-radius:8px;
+    background:white;
+    outline:none;
+}
+
+.filter-row input:focus,
+.filter-row select:focus{
+    border-color:var(--rojo);
+    box-shadow:0 0 0 3px rgba(215,25,32,.1);
+}
+
+/* INSCRIPCIONES */
+
+.registration-list{
+    display:grid;
+    gap:18px;
+}
+
+.registration-card{
+    background:white;
+    border-radius:14px;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    padding:22px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:20px;
+    align-items:center;
+    border-left:5px solid #ddd;
+}
+
+.registration-card[data-status="aprobada"]{
+    border-left-color:#2e9d40;
+}
+
+.registration-card[data-status="pendiente"]{
+    border-left-color:#d79a15;
+}
+
+.registration-card[data-status="rechazada"]{
+    border-left-color:var(--rojo);
+}
+
+.registration-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.registration-title h3{
+    font-size:19px;
+}
+
+.status{
+    display:inline-block;
+    border-radius:20px;
+    padding:7px 12px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.aprobada{
+    background:var(--verde-fondo);
+    color:var(--verde);
+}
+
+.pendiente{
+    background:var(--amarillo-fondo);
+    color:var(--amarillo);
+}
+
+.rechazada{
+    background:#ffdada;
+    color:#b10000;
+}
+
+.available{
+    background:var(--verde-fondo);
+    color:var(--verde);
+}
+
+.full{
+    background:#ffdada;
+    color:#b10000;
+}
+
+.registration-info{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px 24px;
+    margin-top:14px;
+    color:#555;
+    font-size:14px;
+}
+
+.registration-note{
+    margin-top:13px;
+    font-size:13px;
+    color:#666;
+    background:#fafafa;
+    border-radius:8px;
+    padding:10px 12px;
+}
+
+.action-link{
+    border:none;
+    background:var(--rojo);
+    color:white;
+    padding:11px 15px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.action-link:hover{
+    background:var(--rojo-oscuro);
+}
+
+/* CONVOCATORIAS */
+
+.calls-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+    gap:24px;
+}
+
+.call-card{
+    background:white;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 8px 18px rgba(0,0,0,.10);
+    transition:.3s;
+    display:flex;
+    flex-direction:column;
+}
+
+.call-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 30px rgba(0,0,0,.16);
+}
+
+.call-header{
+    background:var(--rojo);
+    color:white;
+    padding:18px;
+}
+
+.call-header h3{
+    font-size:20px;
+}
+
+.call-body{
+    padding:21px;
+    flex:1;
+}
+
+.call-description{
+    color:#666;
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:13px;
+}
+
+.info{
+    display:flex;
+    align-items:flex-start;
+    gap:9px;
+    margin:12px 0;
+    font-size:14px;
+}
+
+.icon{
+    width:24px;
+    flex:0 0 24px;
+}
+
+.call-footer{
+    border-top:1px solid #eee;
+    padding:18px;
+    display:grid;
+    gap:9px;
+}
+
+.primary-btn,
+.secondary-btn{
+    width:100%;
+    border:none;
+    border-radius:8px;
+    padding:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.primary-btn{
+    background:var(--rojo);
+    color:white;
+}
+
+.primary-btn:hover{
+    background:var(--rojo-oscuro);
+}
+
+.secondary-btn{
+    background:#ededed;
+    color:#333;
+}
+
+.primary-btn:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
+
+.registered-btn{
+    background:#dceeff;
+    color:#185e9d;
+    cursor:default;
+}
+
+/* VACÍO */
+
+.empty{
+    display:none;
+    background:white;
+    border-radius:14px;
+    text-align:center;
+    padding:40px 20px;
+    color:#666;
+    box-shadow:0 7px 17px rgba(0,0,0,.07);
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.56);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-card{
+    width:100%;
+    max-width:700px;
+    background:white;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 22px 50px rgba(0,0,0,.28);
+}
+
+.modal-header{
+    background:var(--rojo);
+    color:white;
+    padding:18px 22px;
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:center;
+}
+
+.modal-header h2{
+    font-size:21px;
+}
+
+.close-btn{
+    background:transparent;
+    color:white;
+    border:none;
+    font-size:27px;
+    cursor:pointer;
+}
+
+.modal-body{
+    padding:23px;
+}
+
+.modal-body p{
+    line-height:1.7;
+    color:#555;
+}
+
+.modal-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:18px;
+}
+
+.modal-detail{
+    border-bottom:1px solid #eee;
+    padding-bottom:10px;
+}
+
+.modal-detail span{
+    display:block;
+    font-size:12px;
+    color:#777;
+    font-weight:700;
+    margin-bottom:5px;
+    text-transform:uppercase;
+}
+
+.modal-detail strong{
+    font-size:14px;
+}
+
+.modal-footer{
+    padding:17px 22px;
+    border-top:1px solid #eee;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+}
+
+.notice{
+    display:none;
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    background:#242424;
+    color:white;
+    padding:14px 17px;
+    border-radius:9px;
+    z-index:1200;
+    box-shadow:0 10px 28px rgba(0,0,0,.24);
+    max-width:380px;
+    font-size:14px;
+}
+
+.notice.show{
+    display:block;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:950px){
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .profile-card{
+        grid-template-columns:auto 1fr;
+    }
+
+    .edit-btn{
+        grid-column:1 / -1;
+        width:100%;
+    }
+
+    .section-heading{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}
+
+@media(max-width:650px){
+    .header-content,
+    .profile-card,
+    .registration-card{
+        grid-template-columns:1fr;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .header-content{
+        display:flex;
+    }
+
+    .user-menu{
+        width:100%;
+    }
+
+    .profile-avatar{
+        width:70px;
+        height:70px;
+    }
+
+    .summary-grid,
+    .modal-details{
+        grid-template-columns:1fr;
+    }
+
+    .registration-card .action-link{
+        width:100%;
+    }
+
+    .filter-row{
+        width:100%;
+    }
+
+    .filter-row input,
+    .filter-row select{
+        width:100%;
+    }
+
+    .modal-footer{
+        flex-direction:column-reverse;
+    }
+
+    .modal-footer button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="brand">
+            <h1>Portal del Voluntario</h1>
+            <p>Consulta tus inscripciones y participa en nuevas convocatorias</p>
+        </div>
+
+        <div class="user-menu">
+            <div class="avatar">AT</div>
+            <div class="user-data">
+                <strong>Ana Torres</strong>
+                <span>Voluntaria</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="profile-card">
+        <div class="profile-avatar">AT</div>
+
+        <div class="profile-info">
+            <h2>Ana Torres</h2>
+            <p>Perfil de voluntaria registrado en la Cruz Roja Peruana</p>
+
+            <div class="profile-meta">
+                <span>✉ ana.torres@gmail.com</span>
+                <span>📞 987 654 321</span>
+                <span>🪪 DNI 74851236</span>
+                <span>📍 Arequipa</span>
+            </div>
+        </div>
+
+        <button type="button" class="edit-btn" id="editProfileBtn">
+            Editar perfil
+        </button>
+    </section>
+
+    <nav class="tabs" aria-label="Secciones del perfil">
+        <button type="button" class="tab-btn active" data-tab="myRegistrations">
+            Mis inscripciones
+        </button>
+
+        <button type="button" class="tab-btn" data-tab="availableCalls">
+            Convocatorias disponibles
+        </button>
+    </nav>
+
+    <section class="tab-panel active" id="myRegistrations">
+
+        <div class="summary-grid">
+            <article class="summary-card">
+                <span>Total de inscripciones</span>
+                <strong id="totalRegistrations">3</strong>
+            </article>
+
+            <article class="summary-card">
+                <span>Aceptadas</span>
+                <strong id="acceptedRegistrations">1</strong>
+            </article>
+
+            <article class="summary-card">
+                <span>Pendientes</span>
+                <strong id="pendingRegistrations">1</strong>
+            </article>
+
+            <article class="summary-card">
+                <span>Rechazadas</span>
+                <strong id="rejectedRegistrations">1</strong>
+            </article>
+        </div>
+
+        <div class="section-heading">
+            <div>
+                <h2>Seguimiento de mis inscripciones</h2>
+                <p>Revisa el estado asignado por el administrador de cada convocatoria.</p>
+            </div>
+
+            <div class="filter-row">
+                <select id="registrationStatusFilter" aria-label="Filtrar por estado">
+                    <option value="">Todos los estados</option>
+                    <option value="aprobada">Aceptadas</option>
+                    <option value="pendiente">Pendientes</option>
+                    <option value="rechazada">Rechazadas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="registration-list" id="registrationList">
+
+            <article class="registration-card" data-status="aprobada">
+                <div>
+                    <div class="registration-title">
+                        <h3>Apoyo en Emergencias</h3>
+                        <span class="status aprobada">Aceptada</span>
+                    </div>
+
+                    <div class="registration-info">
+                        <span>📍 Camaná</span>
+                        <span>📅 28 Julio 2026</span>
+                        <span>🕒 07:30 - 17:00</span>
+                        <span>📝 Inscripción: 17 Julio 2026</span>
+                    </div>
+
+                    <p class="registration-note">
+                        Tu solicitud fue aprobada. Preséntate 30 minutos antes y lleva tu documento de identidad.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="action-link detail-registration"
+                    data-title="Apoyo en Emergencias"
+                    data-place="Camaná"
+                    data-date="28 Julio 2026"
+                    data-time="07:30 - 17:00"
+                    data-status="Aceptada"
+                    data-description="Apoyo logístico, orientación a la población y asistencia al equipo de respuesta ante emergencias."
+                >
+                    Ver detalle
+                </button>
+            </article>
+
+            <article class="registration-card" data-status="pendiente">
+                <div>
+                    <div class="registration-title">
+                        <h3>Campaña Médica Comunitaria</h3>
+                        <span class="status pendiente">Pendiente</span>
+                    </div>
+
+                    <div class="registration-info">
+                        <span>📍 Cerro Colorado</span>
+                        <span>📅 05 Agosto 2026</span>
+                        <span>🕒 08:30 - 15:00</span>
+                        <span>📝 Inscripción: 18 Julio 2026</span>
+                    </div>
+
+                    <p class="registration-note">
+                        Tu solicitud está siendo revisada. Recibirás una actualización cuando el administrador tome una decisión.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="action-link detail-registration"
+                    data-title="Campaña Médica Comunitaria"
+                    data-place="Cerro Colorado"
+                    data-date="05 Agosto 2026"
+                    data-time="08:30 - 15:00"
+                    data-status="Pendiente"
+                    data-description="Apoyo en orientación de pacientes, organización de turnos y actividades preventivas de salud."
+                >
+                    Ver detalle
+                </button>
+            </article>
+
+            <article class="registration-card" data-status="rechazada">
+                <div>
+                    <div class="registration-title">
+                        <h3>Capacitación en Primeros Auxilios</h3>
+                        <span class="status rechazada">Rechazada</span>
+                    </div>
+
+                    <div class="registration-info">
+                        <span>📍 Yanahuara</span>
+                        <span>📅 30 Julio 2026</span>
+                        <span>🕒 09:00 - 13:00</span>
+                        <span>📝 Inscripción: 16 Julio 2026</span>
+                    </div>
+
+                    <p class="registration-note">
+                        La solicitud no fue aceptada porque los cupos ya se encontraban completos.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="action-link detail-registration"
+                    data-title="Capacitación en Primeros Auxilios"
+                    data-place="Yanahuara"
+                    data-date="30 Julio 2026"
+                    data-time="09:00 - 13:00"
+                    data-status="Rechazada"
+                    data-description="Capacitación introductoria sobre evaluación inicial, control de hemorragias y respuesta básica."
+                >
+                    Ver detalle
+                </button>
+            </article>
+
+        </div>
+
+        <div class="empty" id="registrationEmpty">
+            No hay inscripciones que coincidan con el filtro seleccionado.
+        </div>
+
+    </section>
+
+    <section class="tab-panel" id="availableCalls">
+
+        <div class="section-heading">
+            <div>
+                <h2>Convocatorias existentes</h2>
+                <p>Consulta lugar, fecha, horario, disponibilidad y estado de tu inscripción.</p>
+            </div>
+
+            <div class="filter-row">
+                <input
+                    type="search"
+                    id="callSearch"
+                    placeholder="Buscar convocatoria"
+                    aria-label="Buscar convocatoria"
+                >
+
+                <select id="callAvailabilityFilter" aria-label="Filtrar convocatorias">
+                    <option value="">Todas</option>
+                    <option value="disponible">Disponibles</option>
+                    <option value="inscrita">Ya inscrita</option>
+                    <option value="lleno">Sin cupos</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="calls-grid" id="callsGrid">
+
+            <article class="call-card" data-name="campaña de donación de sangre" data-filter="disponible">
+                <div class="call-header">
+                    <h3>Campaña de Donación de Sangre</h3>
+                </div>
+
+                <div class="call-body">
+                    <p class="call-description">
+                        Apoya en la orientación de donantes, registro y organización de la campaña.
+                    </p>
+
+                    <div class="info"><span class="icon">📍</span><span>Arequipa - Cercado</span></div>
+                    <div class="info"><span class="icon">📅</span><span>25 Julio 2026</span></div>
+                    <div class="info"><span class="icon">🕒</span><span>08:00 - 14:00</span></div>
+                    <div class="info"><span class="icon">👥</span><span>42 registrados</span></div>
+
+                    <span class="status available">Disponible</span>
+                </div>
+
+                <div class="call-footer">
+                    <button
+                        type="button"
+                        class="secondary-btn detail-call"
+                        data-title="Campaña de Donación de Sangre"
+                        data-place="Arequipa - Cercado"
+                        data-date="25 Julio 2026"
+                        data-time="08:00 - 14:00"
+                        data-status="Disponible"
+                        data-description="Apoyo en recepción de donantes, registro de datos, orientación y organización de ambientes."
+                    >
+                        Ver información
+                    </button>
+
+                    <button
+                        type="button"
+                        class="primary-btn register-btn"
+                        data-title="Campaña de Donación de Sangre"
+                    >
+                        Inscribirme
+                    </button>
+                </div>
+            </article>
+
+            <article class="call-card" data-name="apoyo en emergencias" data-filter="inscrita">
+                <div class="call-header">
+                    <h3>Apoyo en Emergencias</h3>
+                </div>
+
+                <div class="call-body">
+                    <p class="call-description">
+                        Participa en actividades de apoyo logístico y asistencia a la población.
+                    </p>
+
+                    <div class="info"><span class="icon">📍</span><span>Camaná</span></div>
+                    <div class="info"><span class="icon">📅</span><span>28 Julio 2026</span></div>
+                    <div class="info"><span class="icon">🕒</span><span>07:30 - 17:00</span></div>
+                    <div class="info"><span class="icon">👥</span><span>61 registrados</span></div>
+
+                    <span class="status aprobada">Inscripción aceptada</span>
+                </div>
+
+                <div class="call-footer">
+                    <button
+                        type="button"
+                        class="secondary-btn detail-call"
+                        data-title="Apoyo en Emergencias"
+                        data-place="Camaná"
+                        data-date="28 Julio 2026"
+                        data-time="07:30 - 17:00"
+                        data-status="Inscripción aceptada"
+                        data-description="Apoyo logístico, orientación a la población y asistencia al equipo de respuesta ante emergencias."
+                    >
+                        Ver información
+                    </button>
+
+                    <button type="button" class="primary-btn registered-btn" disabled>
+                        Ya estás inscrita
+                    </button>
+                </div>
+            </article>
+
+            <article class="call-card" data-name="capacitación en primeros auxilios" data-filter="lleno">
+                <div class="call-header">
+                    <h3>Capacitación en Primeros Auxilios</h3>
+                </div>
+
+                <div class="call-body">
+                    <p class="call-description">
+                        Formación introductoria para responder ante situaciones de emergencia.
+                    </p>
+
+                    <div class="info"><span class="icon">📍</span><span>Yanahuara</span></div>
+                    <div class="info"><span class="icon">📅</span><span>30 Julio 2026</span></div>
+                    <div class="info"><span class="icon">🕒</span><span>09:00 - 13:00</span></div>
+                    <div class="info"><span class="icon">👥</span><span>80 registrados</span></div>
+
+                    <span class="status full">Cupos completos</span>
+                </div>
+
+                <div class="call-footer">
+                    <button
+                        type="button"
+                        class="secondary-btn detail-call"
+                        data-title="Capacitación en Primeros Auxilios"
+                        data-place="Yanahuara"
+                        data-date="30 Julio 2026"
+                        data-time="09:00 - 13:00"
+                        data-status="Cupos completos"
+                        data-description="Capacitación introductoria sobre evaluación inicial, control de hemorragias y respuesta básica."
+                    >
+                        Ver información
+                    </button>
+
+                    <button type="button" class="primary-btn" disabled>
+                        Sin cupos
+                    </button>
+                </div>
+            </article>
+
+            <article class="call-card" data-name="campaña médica comunitaria" data-filter="inscrita">
+                <div class="call-header">
+                    <h3>Campaña Médica Comunitaria</h3>
+                </div>
+
+                <div class="call-body">
+                    <p class="call-description">
+                        Apoya en una jornada comunitaria de atención y prevención en salud.
+                    </p>
+
+                    <div class="info"><span class="icon">📍</span><span>Cerro Colorado</span></div>
+                    <div class="info"><span class="icon">📅</span><span>05 Agosto 2026</span></div>
+                    <div class="info"><span class="icon">🕒</span><span>08:30 - 15:00</span></div>
+                    <div class="info"><span class="icon">👥</span><span>19 registrados</span></div>
+
+                    <span class="status pendiente">Inscripción pendiente</span>
+                </div>
+
+                <div class="call-footer">
+                    <button
+                        type="button"
+                        class="secondary-btn detail-call"
+                        data-title="Campaña Médica Comunitaria"
+                        data-place="Cerro Colorado"
+                        data-date="05 Agosto 2026"
+                        data-time="08:30 - 15:00"
+                        data-status="Inscripción pendiente"
+                        data-description="Apoyo en orientación de pacientes, organización de turnos y actividades preventivas de salud."
+                    >
+                        Ver información
+                    </button>
+
+                    <button type="button" class="primary-btn registered-btn" disabled>
+                        Solicitud enviada
+                    </button>
+                </div>
+            </article>
+
+        </div>
+
+        <div class="empty" id="callsEmpty">
+            No se encontraron convocatorias que coincidan con los filtros.
+        </div>
+
+    </section>
+
+</main>
+
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2 id="modalTitle">Detalle</h2>
+            <button type="button" class="close-btn" id="closeModal" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="modal-body">
+            <p id="modalDescription"></p>
+
+            <div class="modal-details">
+                <div class="modal-detail">
+                    <span>Lugar</span>
+                    <strong id="modalPlace"></strong>
+                </div>
+
+                <div class="modal-detail">
+                    <span>Fecha</span>
+                    <strong id="modalDate"></strong>
+                </div>
+
+                <div class="modal-detail">
+                    <span>Horario</span>
+                    <strong id="modalTime"></strong>
+                </div>
+
+                <div class="modal-detail">
+                    <span>Estado</span>
+                    <strong id="modalStatus"></strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="secondary-btn" id="closeModalFooter">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div class="notice" id="notice" role="status" aria-live="polite"></div>
+
+<script>
+const tabButtons = document.querySelectorAll(".tab-btn");
+const tabPanels = document.querySelectorAll(".tab-panel");
+
+const registrationStatusFilter = document.getElementById("registrationStatusFilter");
+const registrationCards = Array.from(document.querySelectorAll(".registration-card"));
+const registrationEmpty = document.getElementById("registrationEmpty");
+
+const callSearch = document.getElementById("callSearch");
+const callAvailabilityFilter = document.getElementById("callAvailabilityFilter");
+const callCards = Array.from(document.querySelectorAll(".call-card"));
+const callsEmpty = document.getElementById("callsEmpty");
+
+const detailModal = document.getElementById("detailModal");
+const closeModal = document.getElementById("closeModal");
+const closeModalFooter = document.getElementById("closeModalFooter");
+const notice = document.getElementById("notice");
+
+function normalizeText(value){
+    return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
+function switchTab(tabId){
+    tabButtons.forEach(button => {
+        button.classList.toggle("active", button.dataset.tab === tabId);
+    });
+
+    tabPanels.forEach(panel => {
+        panel.classList.toggle("active", panel.id === tabId);
+    });
+}
+
+tabButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        switchTab(button.dataset.tab);
+    });
+});
+
+function filterRegistrations(){
+    const selectedStatus = registrationStatusFilter.value;
+    let visible = 0;
+
+    registrationCards.forEach(card => {
+        const show = !selectedStatus || card.dataset.status === selectedStatus;
+        card.style.display = show ? "" : "none";
+
+        if(show){
+            visible++;
+        }
+    });
+
+    registrationEmpty.style.display = visible === 0 ? "block" : "none";
+}
+
+registrationStatusFilter.addEventListener("change", filterRegistrations);
+
+function filterCalls(){
+    const search = normalizeText(callSearch.value.trim());
+    const filter = callAvailabilityFilter.value;
+    let visible = 0;
+
+    callCards.forEach(card => {
+        const matchesSearch =
+            !search || normalizeText(card.dataset.name).includes(search);
+
+        const matchesFilter =
+            !filter || card.dataset.filter === filter;
+
+        const show = matchesSearch && matchesFilter;
+        card.style.display = show ? "" : "none";
+
+        if(show){
+            visible++;
+        }
+    });
+
+    callsEmpty.style.display = visible === 0 ? "block" : "none";
+}
+
+callSearch.addEventListener("input", filterCalls);
+callAvailabilityFilter.addEventListener("change", filterCalls);
+
+function openDetail(button){
+    document.getElementById("modalTitle").textContent = button.dataset.title;
+    document.getElementById("modalDescription").textContent = button.dataset.description;
+    document.getElementById("modalPlace").textContent = button.dataset.place;
+    document.getElementById("modalDate").textContent = button.dataset.date;
+    document.getElementById("modalTime").textContent = button.dataset.time;
+    document.getElementById("modalStatus").textContent = button.dataset.status;
+
+    detailModal.classList.add("active");
+}
+
+function closeDetail(){
+    detailModal.classList.remove("active");
+}
+
+document.querySelectorAll(".detail-registration, .detail-call").forEach(button => {
+    button.addEventListener("click", () => openDetail(button));
+});
+
+closeModal.addEventListener("click", closeDetail);
+closeModalFooter.addEventListener("click", closeDetail);
+
+detailModal.addEventListener("click", event => {
+    if(event.target === detailModal){
+        closeDetail();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if(event.key === "Escape"){
+        closeDetail();
+    }
+});
+
+function showNotice(message){
+    notice.textContent = message;
+    notice.classList.add("show");
+
+    window.clearTimeout(showNotice.timer);
+    showNotice.timer = window.setTimeout(() => {
+        notice.classList.remove("show");
+    }, 3000);
+}
+
+document.querySelectorAll(".register-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        const confirmed = window.confirm(
+            `¿Deseas inscribirte en "${button.dataset.title}"?`
+        );
+
+        if(!confirmed){
+            return;
+        }
+
+        button.textContent = "Solicitud enviada";
+        button.disabled = true;
+        button.classList.add("registered-btn");
+
+        const card = button.closest(".call-card");
+        card.dataset.filter = "inscrita";
+
+        const status = card.querySelector(".status");
+        status.className = "status pendiente";
+        status.textContent = "Inscripción pendiente";
+
+        showNotice(
+            "Tu solicitud fue enviada y ahora aparece como pendiente."
+        );
+
+        filterCalls();
+    });
+});
+
+document.getElementById("editProfileBtn").addEventListener("click", () => {
+    showNotice(
+        "La edición del perfil se conectará posteriormente con el formulario y la base de datos."
+    );
+});
+
+filterRegistrations();
+filterCalls();
+</script>
+
+</body>
+</html>

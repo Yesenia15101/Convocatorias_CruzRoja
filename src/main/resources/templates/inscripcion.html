@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convocatorias - Cruz Roja Peruana Arequipa</title>
+
+  <style>
+
+
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #222222;
+      background-color: #f7f5f2;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .contenedor {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    /* ===================== ENCABEZADO ===================== */
+
+    .header-contacto {
+      background-color: #222222;
+      color: #ffffff;
+      font-size: 14px;
+      padding: 8px 0;
+      text-align: center;
+    }
+
+    .header-principal {
+      background-color: #ffffff;
+      border-bottom: 3px solid #e30613;
+      padding: 15px 0;
+    }
+
+    .header-principal .contenedor {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header-principal img {
+      height: 50px;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .menu a {
+      font-weight: bold;
+      font-size: 14px;
+      color: #222222;
+    }
+
+    .menu a:hover {
+      color: #e30613;
+    }
+
+    /* ===================== SECCIÓN PRINCIPAL ===================== */
+
+    .hero {
+      background-color: #e30613;
+      color: #ffffff;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 16px;
+    }
+
+    /* ===================== SECCIONES ===================== */
+
+    .seccion {
+      padding: 50px 20px;
+    }
+
+    .seccion h2 {
+      text-align: center;
+      font-size: 24px;
+      color: #e30613;
+      margin-bottom: 30px;
+    }
+
+    /* ===================== LISTA DE CONVOCATORIAS ===================== */
+
+    .lista-convocatorias {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .tarjeta {
+      background-color: #ffffff;
+      border: 1px solid #e2e2e2;
+      border-left: 5px solid #e30613;
+      border-radius: 6px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tarjeta-info h3 {
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .tarjeta-info p {
+      font-size: 13px;
+      color: #666666;
+    }
+
+    .etiqueta-estado {
+      background-color: #e6f4ea;
+      color: #1e7a3d;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
+
+    /* ===================== BOTONES ===================== */
+
+    .boton {
+      display: inline-block;
+      background-color: #e30613;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .boton:hover {
+      background-color: #a60214;
+    }
+
+    .boton-secundario {
+      background-color: #ffffff;
+      color: #e30613;
+      border: 2px solid #e30613;
+    }
+
+    .boton-secundario:hover {
+      background-color: #fdebec;
+    }
+
+    .boton:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    /* ===================== DETALLE DE CONVOCATORIA ===================== */
+
+    .detalle {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 30px;
+    }
+
+    .detalle h3 {
+      font-size: 22px;
+      color: #e30613;
+      margin-bottom: 10px;
+    }
+
+    .detalle p.descripcion {
+      margin-bottom: 20px;
+      color: #444444;
+    }
+
+    .detalle-datos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .detalle-datos div strong {
+      display: block;
+      color: #888888;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    /* Checklist de requisitos */
+
+    .lista-checklist {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+
+    .lista-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eeeeee;
+      font-size: 14px;
+    }
+
+    .lista-checklist input {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Identificación del voluntario */
+
+    .campo {
+      margin-bottom: 18px;
+    }
+
+    .campo label {
+      display: block;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .campo input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+      font-family: inherit;
+    }
+
+    .aviso {
+      font-size: 13px;
+      color: #a60214;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .mensaje-confirmacion {
+      display: none;
+      background-color: #e6f4ea;
+      border: 1px solid #1e7a3d;
+      color: #1e7a3d;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* ===================== PIE DE PÁGINA ===================== */
+
+    .footer {
+      background-color: #222222;
+      color: #cccccc;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .footer a {
+      color: #ffffff;
+    }
+
+    .footer a:hover {
+      color: #e30613;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ===================== ENCABEZADO ===================== -->
+
+
+  <div class="header-principal">
+    <div class="contenedor">
+      <a href="">
+        <img src="https://www.cruzrojaarequipa.org.pe/wp-content/uploads/2020/08/logotipo-header-crpfa.png" alt="Cruz Roja Peruana Arequipa">
+      </a>
+      <ul class="menu">
+        <li><a href="">Inicio</a></li>
+        <li><a href="">Voluntariado</a></li>
+        <li><a href="">Visualizar</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- =====================  ===================== -->
+
+  <div class="hero">
+    <h1>Convocatorias Activas</h1>
+    <p>Revisa las convocatorias vigentes, verifica los requisitos e inscríbete.</p>
+  </div>
+
+  <!-- ===================== LISTA DE CONVOCATORIAS ===================== -->
+
+  <div class="seccion" id="vista-lista">
+    <div class="contenedor">
+      <h2>Convocatorias disponibles</h2>
+
+ 
+      <div class="lista-convocatorias" id="listaConvocatorias"></div>
+    </div>
+  </div>
+
+  <!-- ===================== DETALLE DE CONVOCATORIA  ===================== -->
+
+  <div class="seccion oculto" id="vista-detalle">
+    <div class="contenedor">
+
+      <button class="boton boton-secundario" id="btnVolver">&larr; Volver a la lista</button>
+
+      <br><br>
+
+      <div class="detalle">
+
+        <h3 id="detalleTitulo"></h3>
+        <p class="descripcion" id="detalleDescripcion"></p>
+
+        <div class="detalle-datos">
+          <div><strong>Área</strong><span id="detalleArea"></span></div>
+          <div><strong>Vacantes</strong><span id="detalleVacantes"></span></div>
+          <div><strong>Inscripciones hasta</strong><span id="detalleFecha"></span></div>
+        </div>
+
+        <h4>Verificación de requisitos</h4>
+        <p style="font-size:13px; color:#666; margin:8px 0 15px 0;">
+          Marca cada requisito que cumples. Debes marcar todos para poder inscribirte.
+        </p>
+
+        <ul class="lista-checklist" id="listaRequisitos"></ul>
+
+        <h4>Identifícate para inscribirte</h4>
+        <p style="font-size:13px; color:#666; margin:8px 0 15px 0;">
+          Como ya eres parte de nuestra base de datos de voluntarios, solo necesitamos tu DNI para verificar tu registro.
+        </p>
+
+        <div class="campo">
+          <label>DNI del voluntario</label>
+          <input type="text" id="inputDni" placeholder="Ej. 12345678" maxlength="8">
+        </div>
+
+        <p class="aviso" id="avisoRequisitos">Debes marcar todos los requisitos antes de inscribirte.</p>
+        <p class="aviso" id="avisoDni">Ingresa tu número de DNI.</p>
+
+        <button class="boton" id="btnInscribirme">Inscribirme</button>
+
+        <div class="mensaje-confirmacion" id="mensajeConfirmacion"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PIE DE PÁGINA ===================== -->
+
+  <div class="footer">
+    <p>Cruz Roja Peruana - Filial Arequipa</p>
+    <p>Urb. Municipal Calle Castilla Nro. 162, Cercado, Arequipa</p>
+    <p>Teléfono: (054) 204343 / 997 677 728 &nbsp; | &nbsp; secretaria@cruzrojaarequipa.org</p>
+    <p><a href="https://www.cruzrojaarequipa.org.pe/">Volver al inicio</a></p>
+  </div>
+
+  <!-- ===================== SCRIPT ===================== -->
+  <script>
+
+    
+    const convocatorias = [
+      {
+        id: 1,
+        titulo: "Voluntariado 2026 - A",
+        area: "Voluntariado general",
+        vacantes: 40,
+        fechaLimite: "07/02/2026",
+        descripcion: "Convocatoria general para nuevos voluntarios de la Cruz Roja Peruana Filial Arequipa.",
+        requisitos: [
+          "Ser mayor de edad",
+          "Tener disponibilidad de tiempo para instrucción y actividades",
+          "Contar con estado físico adecuado",
+          "Presentar DNI vigente"
+        ]
+      },
+      {
+        id: 2,
+        titulo: "Brigadas de Primeros Auxilios",
+        area: "Salud y emergencias",
+        vacantes: 15,
+        fechaLimite: "20/02/2026",
+        descripcion: "Voluntarios capacitados para brindar apoyo en primeros auxilios en eventos y emergencias.",
+        requisitos: [
+          "Haber llevado el curso de Primeros Auxilios",
+          "Disponibilidad los fines de semana",
+          "Presentar DNI vigente"
+        ]
+      },
+      {
+        id: 3,
+        titulo: "Área de Comunicaciones y Marketing",
+        area: "Voluntariado profesional",
+        vacantes: 5,
+        fechaLimite: "28/02/2026",
+        descripcion: "Apoyo en la difusión de campañas y contenido para redes sociales de la institución.",
+        requisitos: [
+          "Conocimientos en diseño o redacción",
+          "Disponibilidad de al menos 4 horas semanales",
+          "Presentar DNI vigente"
+        ]
+      }
+    ];
+
+
+    const inscripcionesRegistradas = [];
+
+    let convocatoriaSeleccionada = null;
+
+
+
+      // 2. MOSTRAR LA LISTA DE CONVOCATORIAS
+
+
+    function mostrarListaConvocatorias() {
+      const contenedorLista = document.getElementById("listaConvocatorias");
+      contenedorLista.innerHTML = ""; // limpiamos antes de dibujar
+
+      convocatorias.forEach(function (convocatoria) {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "tarjeta";
+
+        tarjeta.innerHTML = `
+          <div class="tarjeta-info">
+            <h3>${convocatoria.titulo} <span class="etiqueta-estado">Activa</span></h3>
+            <p>${convocatoria.area} &nbsp;·&nbsp; ${convocatoria.vacantes} vacantes &nbsp;·&nbsp; Hasta ${convocatoria.fechaLimite}</p>
+          </div>
+          <button class="boton" onclick="verDetalle(${convocatoria.id})">Ver detalle</button>
+        `;
+
+        contenedorLista.appendChild(tarjeta);
+      });
+    }
+
+
+    /* =================================================================
+       3. MOSTRAR EL DETALLE DE UNA CONVOCATORIA
+    ================================================================= */
+
+    function verDetalle(id) {
+      // Buscamos la convocatoria seleccionada por su id
+      convocatoriaSeleccionada = convocatorias.find(function (c) {
+        return c.id === id;
+      });
+
+  
+      document.getElementById("detalleTitulo").textContent = convocatoriaSeleccionada.titulo;
+      document.getElementById("detalleDescripcion").textContent = convocatoriaSeleccionada.descripcion;
+      document.getElementById("detalleArea").textContent = convocatoriaSeleccionada.area;
+      document.getElementById("detalleVacantes").textContent = convocatoriaSeleccionada.vacantes;
+      document.getElementById("detalleFecha").textContent = convocatoriaSeleccionada.fechaLimite;
+
+      // Dibujamos el checklist de requisitos
+      const listaRequisitos = document.getElementById("listaRequisitos");
+      listaRequisitos.innerHTML = "";
+
+      convocatoriaSeleccionada.requisitos.forEach(function (requisito, index) {
+        const item = document.createElement("li");
+        item.innerHTML = `
+          <input type="checkbox" id="requisito-${index}">
+          <label for="requisito-${index}">${requisito}</label>
+        `;
+        listaRequisitos.appendChild(item);
+      });
+
+      // Reiniciamos avisos, mensaje y campo de DNI
+      document.getElementById("avisoRequisitos").style.display = "none";
+      document.getElementById("avisoDni").style.display = "none";
+      document.getElementById("mensajeConfirmacion").style.display = "none";
+      document.getElementById("inputDni").value = "";
+      document.getElementById("btnInscribirme").disabled = false;
+
+      // Cambiamos de vista:
+      document.getElementById("vista-lista").classList.add("oculto");
+      document.getElementById("vista-detalle").classList.remove("oculto");
+      window.scrollTo(0, 0);
+    }
+
+
+    /* =================================================================
+       4. VOLVER A LA LISTA
+    ================================================================= */
+
+    document.getElementById("btnVolver").addEventListener("click", function () {
+      document.getElementById("vista-detalle").classList.add("oculto");
+      document.getElementById("vista-lista").classList.remove("oculto");
+    });
+
+
+    /* =================================================================
+       5. VERIFICAR REQUISITOS Y REGISTRAR LA INSCRIPCIÓN
+    ================================================================= */
+
+    document.getElementById("btnInscribirme").addEventListener("click", function () {
+
+      //  Verificar que todos los requisitos estén marcados
+      const casillasRequisitos = document.querySelectorAll("#listaRequisitos input[type='checkbox']");
+      const todosMarcados = Array.from(casillasRequisitos).every(function (casilla) {
+        return casilla.checked;
+      });
+
+      if (!todosMarcados) {
+        document.getElementById("avisoRequisitos").style.display = "block";
+        return;
+      } else {
+        document.getElementById("avisoRequisitos").style.display = "none";
+      }
+
+      // 5.2 Verificar que se ingresó el DNI
+      const dni = document.getElementById("inputDni").value.trim();
+
+      if (dni === "") {
+        document.getElementById("avisoDni").style.display = "block";
+        return;
+      } else {
+        document.getElementById("avisoDni").style.display = "none";
+      }
+
+      // 3Registrar la inscripción en el sistema
+
+      const nuevaInscripcion = {
+        dni: dni,
+        convocatoriaId: convocatoriaSeleccionada.id,
+        convocatoriaTitulo: convocatoriaSeleccionada.titulo,
+        fechaInscripcion: new Date().toLocaleString()
+      };
+
+      inscripcionesRegistradas.push(nuevaInscripcion);
+
+      console.log("Inscripción registrada:", nuevaInscripcion);
+      console.log("Todas las inscripciones:", inscripcionesRegistradas);
+
+      //  Mostrar mensaje de confirmación y desactivar el botón
+      const mensaje = document.getElementById("mensajeConfirmacion");
+      mensaje.textContent = "Inscripción registrada correctamente para el DNI " + dni + " en la convocatoria \"" + convocatoriaSeleccionada.titulo + "\".";
+      mensaje.style.display = "block";
+
+      document.getElementById("btnInscribirme").disabled = true;
+    });
+
+
+
+    mostrarListaConvocatorias();
+
+  </script>
+
+</body>
+</html>
