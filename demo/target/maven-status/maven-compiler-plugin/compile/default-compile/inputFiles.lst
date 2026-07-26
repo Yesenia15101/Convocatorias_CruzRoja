@@ -1,13 +1,25 @@
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\aplicacion\PostulacionServicioAplicacion.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\entities\Postulacion.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\entities\Voluntario.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\enums\EstadoPostulacion.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\repositories\IPostulacionRepositorio.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\valueobjects\Perfil.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\infraestructura\PostulacionRepositorioImpl.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\presentacion\PostulacionController.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\dominio\entities\Convocatoria.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\dominio\repositories\IConvocatoriaRepositorio.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\infraestructura\ConvocatoriaRepositorioImpl.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\ConvocatoriaController.java
-D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\DemoApplication.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\aplicacion\PostulacionServicioAplicacion.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\entities\Postulacion.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\entities\Voluntario.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\enums\EstadoPostulacion.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\repositories\IPostulacionRepositorio.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\valueobjects\Perfil.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\infraestructura\PostulacionRepositorioImpl.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\presentacion\PostulacionController.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\dominio\entities\Convocatoria.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\dominio\repositories\IConvocatoriaRepositorio.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\infraestructura\ConvocatoriaRepositorioImpl.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\aplicacion\dto\InscripcionDTO.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\aplicacion\interfaces\IInscripcionServicio.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\aplicacion\services\InscripcionServicioAplicacion.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\dominio\entities\Inscripcion.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\dominio\enums\EstadoInscripcion.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\dominio\factories\InscripcionFabrica.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\dominio\repositories\IInscripcionRepositorio.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\dominio\valueobjects\Detalles.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\infraestructura\persistence\InscripcionRepositorioImpl.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\presentacion\controllers\InscripcionController.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc3_inscripciones\presentacion\requests\InscripcionRequest.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\ConvocatoriaController.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\DemoApplication.java
+C:\Users\user\Documents\proyectos en git\ingenieria_de_sistemas\proyectio fibnakl final\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\MainController.java

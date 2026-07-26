@@ -1,13 +1,2 @@
-com\example\demo\bc1_usuarios\dominio\entities\Postulacion.class
-com\example\demo\bc1_usuarios\aplicacion\PostulacionServicioAplicacion.class
 com\example\demo\DemoApplication.class
-com\example\demo\bc1_usuarios\dominio\valueobjects\Perfil.class
-com\example\demo\bc1_usuarios\infraestructura\PostulacionRepositorioImpl.class
 com\example\demo\ConvocatoriaController.class
-com\example\demo\bc1_usuarios\presentacion\PostulacionController.class
-com\example\demo\bc2_convocatorias\infraestructura\ConvocatoriaRepositorioImpl.class
-com\example\demo\bc1_usuarios\dominio\entities\Voluntario.class
-com\example\demo\bc1_usuarios\dominio\repositories\IPostulacionRepositorio.class
-com\example\demo\bc2_convocatorias\dominio\entities\Convocatoria.class
-com\example\demo\bc1_usuarios\dominio\enums\EstadoPostulacion.class
-com\example\demo\bc2_convocatorias\dominio\repositories\IConvocatoriaRepositorio.class
