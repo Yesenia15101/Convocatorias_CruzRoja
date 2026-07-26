@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 /**
  * Servicio de aplicación.
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  * El método actualizarEstado aplica Cookbook: valida, transforma, busca,
  * modifica, persiste y devuelve el resultado en pasos ordenados.
  */
+@Service
 public final class InscripcionServicioAplicacion implements IInscripcionServicio {
     private final IInscripcionRepositorio repositorio;
 

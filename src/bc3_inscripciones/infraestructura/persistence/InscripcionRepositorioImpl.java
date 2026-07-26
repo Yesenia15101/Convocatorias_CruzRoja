@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.springframework.stereotype.Repository;
 
 /**
  * Persistent-Tables: almacena las inscripciones en una tabla TSV persistente.
  * No necesita librerías externas ni una base de datos instalada.
  */
+@Repository
 public final class InscripcionRepositorioImpl implements IInscripcionRepositorio {
     private static final String CABECERA = String.join("\t",
             "id",
@@ -36,6 +38,10 @@ public final class InscripcionRepositorioImpl implements IInscripcionRepositorio
 
     private final Path archivo;
     private final ReentrantReadWriteLock bloqueo = new ReentrantReadWriteLock();
+
+    public InscripcionRepositorioImpl() throws IOException {
+        this(Path.of("resources", "database", "inscripciones.tsv"));
+    }
 
     public InscripcionRepositorioImpl(Path archivo) throws IOException {
         this.archivo = archivo.toAbsolutePath().normalize();
