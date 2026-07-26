@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estado de Inscripción - Cruz Roja Peruana Arequipa</title>
+
+  <!--
+    HF.3.2.1 — Ver estado de inscripción
+    Responsable: Natalie Marleny Lazo Paxi
+    Lab 9 — Convenciones de Codificación aplicadas:
+      C1. HTML semántico (header, nav, main, section, table, footer)
+      C2. Nombrado consistente: kebab-case en clases CSS, camelCase en ids y JS,
+          UPPER_SNAKE_CASE en constantes
+      C3. Indentación de 2 espacios y comentarios de sección
+      C4. DRY: renderizado por función reutilizable + mapa de estados
+      C5. Manejo de errores/estados vacíos (validación de DNI, mensaje sin resultados)
+      C6. Seguridad y buenas prácticas JS: const/let, textContent, addEventListener
+          (sin manejadores inline ni innerHTML con datos del usuario)
+  -->
+
+  <style>
+    /* ===================== BASE ===================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #222222;
+      background-color: #f7f5f2;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .contenedor {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    /* ===================== ENCABEZADO ===================== */
+
+    .header-contacto {
+      background-color: #222222;
+      color: #ffffff;
+      font-size: 14px;
+      padding: 8px 0;
+      text-align: center;
+    }
+
+    .header-principal {
+      background-color: #ffffff;
+      border-bottom: 3px solid #e30613;
+      padding: 15px 0;
+    }
+
+    .header-principal .contenedor {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .menu a {
+      font-weight: bold;
+      font-size: 14px;
+      color: #222222;
+    }
+
+    .menu a:hover {
+      color: #e30613;
+    }
+
+    /* ===================== HERO ===================== */
+
+    .hero {
+      background-color: #e30613;
+      color: #ffffff;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    /* ===================== CONSULTA ===================== */
+
+    .panel-consulta {
+      background-color: #ffffff;
+      border: 1px solid #e0dcd6;
+      border-radius: 8px;
+      padding: 25px;
+      margin: 30px auto;
+      max-width: 520px;
+    }
+
+    .panel-consulta h2 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .panel-consulta p {
+      font-size: 13px;
+      color: #666666;
+      margin-bottom: 15px;
+    }
+
+    .campo label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .campo input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .boton {
+      display: inline-block;
+      background-color: #e30613;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .boton:hover {
+      background-color: #b8050f;
+    }
+
+    .aviso-error {
+      display: none;
+      color: #b8050f;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    /* ===================== RESULTADOS ===================== */
+
+    .seccion-resultados {
+      margin: 10px auto 50px;
+    }
+
+    .seccion-resultados h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .tabla-inscripciones {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+      border: 1px solid #e0dcd6;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .tabla-inscripciones th {
+      background-color: #222222;
+      color: #ffffff;
+      text-align: left;
+      padding: 12px;
+    }
+
+    .tabla-inscripciones td {
+      padding: 12px;
+      border-top: 1px solid #eeeae4;
+    }
+
+    .etiqueta-estado {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .estado-confirmada { background-color: #1e8e3e; }
+    .estado-pendiente  { background-color: #e8a100; }
+    .estado-rechazada  { background-color: #b8050f; }
+
+    .mensaje-vacio {
+      background-color: #fff8e6;
+      border: 1px solid #f0d890;
+      border-radius: 8px;
+      padding: 18px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* ===================== PIE DE PÁGINA ===================== */
+
+    .footer {
+      background-color: #222222;
+      color: #ffffff;
+      text-align: center;
+      font-size: 13px;
+      padding: 25px 20px;
+      line-height: 1.8;
+    }
+
+    .footer a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===================== ENCABEZADO ===================== -->
+
+  <header>
+    <div class="header-contacto">
+      Cruz Roja Peruana - Filial Arequipa | Teléfono: (054) 204343
+    </div>
+    <div class="header-principal">
+      <div class="contenedor">
+        <strong>Cruz Roja Arequipa</strong>
+        <nav>
+          <ul class="menu">
+            <li><a href="main.html">Inicio</a></li>
+            <li><a href="convocatorias.html">Convocatorias</a></li>
+            <li><a href="inscripcion.html">Inscribirme</a></li>
+            <li><a href="estado_inscripcion.html">Mi Estado</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+
+  <section class="hero">
+    <h1>Estado de mi Inscripción</h1>
+    <p>Consulta el estado de tus postulaciones a las convocatorias de voluntariado.</p>
+  </section>
+
+  <main class="contenedor">
+
+    <!-- ===================== PANEL DE CONSULTA ===================== -->
+
+    <section class="panel-consulta">
+      <h2>Consulta por DNI</h2>
+      <p>Ingresa el DNI con el que realizaste tu inscripción para ver el estado actualizado.</p>
+
+      <div class="campo">
+        <label for="inputDni">DNI del voluntario</label>
+        <input type="text" id="inputDni" placeholder="Ej. 12345678" maxlength="8" inputmode="numeric">
+      </div>
+
+      <p class="aviso-error" id="avisoDni">Ingresa un DNI válido de 8 dígitos.</p>
+
+      <button type="button" class="boton" id="btnConsultar">Consultar estado</button>
+    </section>
+
+    <!-- ===================== RESULTADOS ===================== -->
+
+    <section class="seccion-resultados oculto" id="seccionResultados">
+      <h2>Mis inscripciones</h2>
+
+      <table class="tabla-inscripciones" id="tablaInscripciones">
+        <thead>
+          <tr>
+            <th>Convocatoria</th>
+            <th>Fecha de inscripción</th>
+            <th>Servicio</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+          <!-- Filas generadas dinámicamente por renderizarInscripciones() -->
+        </tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacio">
+        No se encontraron inscripciones registradas para el DNI ingresado.
+        Puedes inscribirte desde la página <a href="inscripcion.html">Inscribirme</a>.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== PIE DE PÁGINA ===================== -->
+
+  <footer class="footer">
+    <p>Cruz Roja Peruana - Filial Arequipa</p>
+    <p>Urb. Municipal Calle Castilla Nro. 162, Cercado, Arequipa</p>
+    <p>Teléfono: (054) 204343 / 997 677 728 &nbsp; | &nbsp; secretaria@cruzrojaarequipa.org</p>
+    <p><a href="main.html">Volver al inicio</a></p>
+  </footer>
+
+  <!-- ===================== SCRIPT ===================== -->
+
+  <script>
+    "use strict";
+
+    /* =================================================================
+       1. DATOS DE EJEMPLO (simulan la respuesta del backend — se
+          reemplazarán por un fetch al InscripcionController REST)
+    ================================================================= */
+
+    const DNI_LONGITUD = 8;
+
+    const ESTADOS = {
+      CONFIRMADA: { texto: "Confirmada", clase: "estado-confirmada" },
+      PENDIENTE:  { texto: "Pendiente",  clase: "estado-pendiente" },
+      RECHAZADA:  { texto: "Rechazada",  clase: "estado-rechazada" }
+    };
+
+    const inscripcionesRegistradas = [
+      {
+        dni: "12345678",
+        convocatoria: "Voluntariado 2026 - A",
+        fechaInscripcion: "10/07/2026",
+        servicio: "Voluntariado general",
+        estado: "CONFIRMADA"
+      },
+      {
+        dni: "12345678",
+        convocatoria: "Brigadas de Primeros Auxilios",
+        fechaInscripcion: "12/07/2026",
+        servicio: "Salud y emergencias",
+        estado: "PENDIENTE"
+      },
+      {
+        dni: "87654321",
+        convocatoria: "Área de Comunicaciones y Marketing",
+        fechaInscripcion: "05/07/2026",
+        servicio: "Voluntariado profesional",
+        estado: "RECHAZADA"
+      }
+    ];
+
+    /* =================================================================
+       2. VALIDACIÓN
+    ================================================================= */
+
+    function esDniValido(dni) {
+      return dni.length === DNI_LONGITUD && /^[0-9]+$/.test(dni);
+    }
+
+    /* =================================================================
+       3. CONSULTA Y RENDERIZADO
+    ================================================================= */
+
+    function buscarInscripcionesPorDni(dni) {
+      return inscripcionesRegistradas.filter(function (inscripcion) {
+        return inscripcion.dni === dni;
+      });
+    }
+
+    function crearCeldaTexto(texto) {
+      const celda = document.createElement("td");
+      celda.textContent = texto;
+      return celda;
+    }
+
+    function crearCeldaEstado(codigoEstado) {
+      const estado = ESTADOS[codigoEstado];
+      const celda = document.createElement("td");
+      const etiqueta = document.createElement("span");
+
+      etiqueta.className = "etiqueta-estado " + estado.clase;
+      etiqueta.textContent = estado.texto;
+      celda.appendChild(etiqueta);
+
+      return celda;
+    }
+
+    function renderizarInscripciones(inscripciones) {
+      const cuerpoTabla = document.getElementById("cuerpoTabla");
+      const tabla = document.getElementById("tablaInscripciones");
+      const mensajeVacio = document.getElementById("mensajeVacio");
+
+      cuerpoTabla.textContent = "";
+
+      if (inscripciones.length === 0) {
+        tabla.classList.add("oculto");
+        mensajeVacio.classList.remove("oculto");
+        return;
+      }
+
+      tabla.classList.remove("oculto");
+      mensajeVacio.classList.add("oculto");
+
+      inscripciones.forEach(function (inscripcion) {
+        const fila = document.createElement("tr");
+        fila.appendChild(crearCeldaTexto(inscripcion.convocatoria));
+        fila.appendChild(crearCeldaTexto(inscripcion.fechaInscripcion));
+        fila.appendChild(crearCeldaTexto(inscripcion.servicio));
+        fila.appendChild(crearCeldaEstado(inscripcion.estado));
+        cuerpoTabla.appendChild(fila);
+      });
+    }
+
+    /* =================================================================
+       4. EVENTOS
+    ================================================================= */
+
+    document.getElementById("btnConsultar").addEventListener("click", function () {
+      const avisoDni = document.getElementById("avisoDni");
+      const dni = document.getElementById("inputDni").value.trim();
+
+      if (!esDniValido(dni)) {
+        avisoDni.style.display = "block";
+        document.getElementById("seccionResultados").classList.add("oculto");
+        return;
+      }
+
+      avisoDni.style.display = "none";
+      document.getElementById("seccionResultados").classList.remove("oculto");
+      renderizarInscripciones(buscarInscripcionesPorDni(dni));
+    });
+
+    document.getElementById("inputDni").addEventListener("keydown", function (evento) {
+      if (evento.key === "Enter") {
+        document.getElementById("btnConsultar").click();
+      }
+    });
+  </script>
+
+</body>
+</html>
