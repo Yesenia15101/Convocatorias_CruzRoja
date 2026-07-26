@@ -325,9 +325,10 @@
         <img src="https://www.cruzrojaarequipa.org.pe/wp-content/uploads/2020/08/logotipo-header-crpfa.png" alt="Cruz Roja Peruana Arequipa">
       </a>
       <ul class="menu">
-        <li><a href="">Inicio</a></li>
-        <li><a href="">Voluntariado</a></li>
-        <li><a href="">Visualizar</a></li>
+        <li><a href="main.html">HomePage</a></li>
+        <li><a href="convocatorias.html">Convocatorias</a></li>
+        <li><a href="inscripcion.html">Inscribirse</a></li>
+        <li><a href="estado_inscripcion.html">Estado Inscripción</a></li>
       </ul>
     </div>
   </div>
@@ -408,9 +409,25 @@
   </div>
 
   <!-- ===================== SCRIPT ===================== -->
+  <!--
+    NOTA DE ARQUITECTURA:
+    Este archivo (inscripcion.html) es solo la VISTA. No debe contener
+    reglas de negocio ni acceso a datos. Toda esa lógica vive en el
+    backend Java, dentro del Bounded Context bc3_inscripciones:
+
+      fetch() en este HTML
+        -> InscripcionController      (presentacion)  HTTP <-> DTO
+        -> InscripcionServicioAplicacion (aplicacion)  caso de uso
+        -> Inscripcion / InscripcionFabrica (dominio)  reglas de negocio
+        -> IInscripcionRepositorio / Impl (infraestructura) persistencia
+
+    Aquí solo llamamos a los endpoints REST expuestos por
+    InscripcionController: POST/GET/PATCH /api/inscripciones/**
+  -->
   <script>
 
-    
+    const URL_BASE_API = "/api/inscripciones";
+
     const convocatorias = [
       {
         id: 1,
@@ -454,8 +471,6 @@
       }
     ];
 
-
-    const inscripcionesRegistradas = [];
 
     let convocatoriaSeleccionada = null;
 
@@ -540,54 +555,109 @@
 
 
     /* =================================================================
-       5. VERIFICAR REQUISITOS Y REGISTRAR LA INSCRIPCIÓN
+       5. VERIFICAR REQUISITOS DEL VOLUNTARIO
     ================================================================= */
 
-    document.getElementById("btnInscribirme").addEventListener("click", function () {
-
-      //  Verificar que todos los requisitos estén marcados
+    function todosLosRequisitosEstanMarcados() {
       const casillasRequisitos = document.querySelectorAll("#listaRequisitos input[type='checkbox']");
-      const todosMarcados = Array.from(casillasRequisitos).every(function (casilla) {
+      return Array.from(casillasRequisitos).every(function (casilla) {
         return casilla.checked;
       });
+    }
 
-      if (!todosMarcados) {
-        document.getElementById("avisoRequisitos").style.display = "block";
-        return;
-      } else {
-        document.getElementById("avisoRequisitos").style.display = "none";
+    function obtenerDniIngresado() {
+      return document.getElementById("inputDni").value.trim();
+    }
+
+    function ocultarAvisos() {
+      document.getElementById("avisoRequisitos").style.display = "none";
+      document.getElementById("avisoDni").style.display = "none";
+    }
+
+    function mostrarAviso(idAviso, texto) {
+      const aviso = document.getElementById(idAviso);
+      if (texto) {
+        aviso.textContent = texto;
+      }
+      aviso.style.display = "block";
+    }
+
+    /* =================================================================
+       6. CONFIRMAR LA INSCRIPCIÓN ANTES DE GUARDARLA
+    ================================================================= */
+
+    function solicitarConfirmacion(dni) {
+      return window.confirm(
+        "¿Confirmas tu inscripción a \"" + convocatoriaSeleccionada.titulo + "\" con el DNI " + dni + "?"
+      );
+    }
+
+    /* =================================================================
+       7. REGISTRAR LA INSCRIPCIÓN EN EL SISTEMA (backend real)
+    ================================================================= */
+
+    async function registrarInscripcionEnBackend(dni) {
+      const respuesta = await fetch(URL_BASE_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dniVoluntario: dni,
+          convocatoriaId: convocatoriaSeleccionada.id,
+          observaciones: ""
+        })
+      });
+
+      if (respuesta.status === 409) {
+        const mensajeConflicto = await respuesta.text();
+        throw new Error(mensajeConflicto || "Ya estás inscrito en esta convocatoria.");
       }
 
-      // 5.2 Verificar que se ingresó el DNI
-      const dni = document.getElementById("inputDni").value.trim();
-
-      if (dni === "") {
-        document.getElementById("avisoDni").style.display = "block";
-        return;
-      } else {
-        document.getElementById("avisoDni").style.display = "none";
+      if (!respuesta.ok) {
+        const mensajeError = await respuesta.text();
+        throw new Error(mensajeError || "No se pudo registrar la inscripción.");
       }
 
-      // 3Registrar la inscripción en el sistema
+      return respuesta.json(); // InscripcionDTO
+    }
 
-      const nuevaInscripcion = {
-        dni: dni,
-        convocatoriaId: convocatoriaSeleccionada.id,
-        convocatoriaTitulo: convocatoriaSeleccionada.titulo,
-        fechaInscripcion: new Date().toLocaleString()
-      };
-
-      inscripcionesRegistradas.push(nuevaInscripcion);
-
-      console.log("Inscripción registrada:", nuevaInscripcion);
-      console.log("Todas las inscripciones:", inscripcionesRegistradas);
-
-      //  Mostrar mensaje de confirmación y desactivar el botón
+    function mostrarInscripcionExitosa(inscripcionCreada) {
       const mensaje = document.getElementById("mensajeConfirmacion");
-      mensaje.textContent = "Inscripción registrada correctamente para el DNI " + dni + " en la convocatoria \"" + convocatoriaSeleccionada.titulo + "\".";
+      mensaje.textContent =
+        "Inscripción registrada correctamente para el DNI " + inscripcionCreada.dniVoluntario +
+        " en la convocatoria \"" + convocatoriaSeleccionada.titulo + "\". Estado: " +
+        inscripcionCreada.estadoDescripcion + ".";
       mensaje.style.display = "block";
-
       document.getElementById("btnInscribirme").disabled = true;
+    }
+
+    document.getElementById("btnInscribirme").addEventListener("click", async function () {
+      ocultarAvisos();
+
+      if (!todosLosRequisitosEstanMarcados()) {
+        mostrarAviso("avisoRequisitos");
+        return;
+      }
+
+      const dni = obtenerDniIngresado();
+      if (dni === "") {
+        mostrarAviso("avisoDni");
+        return;
+      }
+
+      if (!solicitarConfirmacion(dni)) {
+        return; // el voluntario canceló la confirmación
+      }
+
+      const botonInscribirme = document.getElementById("btnInscribirme");
+      botonInscribirme.disabled = true;
+
+      try {
+        const inscripcionCreada = await registrarInscripcionEnBackend(dni);
+        mostrarInscripcionExitosa(inscripcionCreada);
+      } catch (error) {
+        mostrarAviso("avisoDni", error.message);
+        botonInscribirme.disabled = false;
+      }
     });
 
 
