@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Convocatorias</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f5f5f5;
+        }
+
+        /* ===== Barra Superior ===== */
+        .top-bar{
+
+            background:white;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:15px 60px;
+
+        }
+
+        .top-logo img{
+
+            height:60px;
+
+        }
+
+        .top-info{
+
+            display:flex;
+
+            gap:40px;
+
+        }
+
+        .info-item{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            color:#444;
+
+            font-size:14px;
+
+        }
+
+        .info-item strong{
+
+            color:#c8102e;
+
+        }
+
+        header{
+            background:#c8102e;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px 60px;
+        }
+
+        .logo{
+            font-size:26px;
+            font-weight:bold;
+        }
+
+        nav ul{
+            list-style:none;
+            display:flex;
+            gap:35px;
+        }
+
+        nav a{
+            color:white;
+            text-decoration:none;
+            font-size:17px;
+            font-weight:bold;
+        }
+
+        nav a:hover{
+            text-decoration:underline;
+        }
+
+        /* ===== Banner Principal ===== */
+
+        .hero{
+
+            height:520px;
+
+            background:url("https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=1600") center/cover;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+        }
+
+        .hero-content{
+
+            background:rgba(255,255,255,0.9);
+
+            padding:40px;
+
+            text-align:center;
+
+            border-radius:10px;
+
+        }
+
+        .hero h1{
+
+            color:#c8102e;
+
+            font-size:42px;
+
+            margin-bottom:20px;
+
+        }
+
+        .hero p{
+
+            font-size:18px;
+
+            margin-bottom:30px;
+
+            color:#444;
+
+            max-width:700px;
+
+        }
+
+        .boton{
+
+            background:#c8102e;
+
+            color:white;
+
+            padding:15px 30px;
+
+            text-decoration:none;
+
+            border-radius:5px;
+
+            font-weight:bold;
+
+        }
+
+        .boton:hover{
+
+            background:#a10d25;
+
+        }
+
+        /* ===== Información ===== */
+
+        .info{
+
+            padding:60px 80px;
+
+            text-align:center;
+
+        }
+
+        .info h2{
+
+            color:#c8102e;
+
+            margin-bottom:40px;
+
+            font-size:32px;
+
+        }
+
+        .cards{
+
+            display:flex;
+
+            justify-content:center;
+
+            gap:30px;
+
+            flex-wrap:wrap;
+
+        }
+
+        .card{
+
+            width:300px;
+
+            background:white;
+
+            padding:25px;
+
+            border-radius:8px;
+
+            box-shadow:0px 2px 10px rgba(0,0,0,.1);
+
+        }
+
+        .card h3{
+
+            color:#c8102e;
+
+            margin-bottom:15px;
+
+        }
+
+        footer{
+
+            background:#333;
+
+            color:white;
+
+            text-align:center;
+
+            padding:20px;
+
+            margin-top:40px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="top-bar">
+
+    <div class="top-logo">
+        <img src="https://www.cruzrojaarequipa.org.pe/wp-content/uploads/2020/08/logotipo-header-crpfa.png"
+             alt="Cruz Roja">
+    </div>
+
+    <div class="top-info">
+
+        <div class="info-item">
+            📍
+            <div>
+                <strong>Dirección</strong><br>
+                Urb. Municipal Calle Castilla N°162<br>
+                Cercado, Arequipa
+            </div>
+        </div>
+
+        <div class="info-item">
+            ☎
+            <div>
+                <strong>Contacto</strong><br>
+                993 748 009<br>
+                (054) 204343
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<header>
+
+    <div class="logo">
+
+        Cruz Roja Arequipa
+
+    </div>
+
+    <nav>
+
+        <ul>
+
+            <li><a href="#">Convocatorias</a></li>
+
+            <li><a href="#">Inscribirse</a></li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>Sistema de Gestión de Convocatorias</h1>
+
+        <p>
+
+            Bienvenido al sistema web de la Cruz Roja Peruana - Filial Arequipa.
+            Consulta las convocatorias disponibles e inscríbete como voluntario
+            de forma rápida y sencilla.
+
+        </p>
+
+        <a href="#" class="boton">
+
+            Ver Convocatorias
+
+        </a>
+
+    </div>
+
+</section>
+
+<section class="info">
+
+    <h2>¿Qué puedes hacer?</h2>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>📋 Convocatorias</h3>
+
+            <p>
+
+                Consulta todas las convocatorias vigentes y revisa
+                sus requisitos, fechas y detalles.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>📝 Inscripciones</h3>
+
+            <p>
+
+                Registra tu participación en las convocatorias
+                disponibles de manera sencilla.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>📅 Información</h3>
+
+            <p>
+
+                Mantente informado sobre las actividades
+                y procesos de selección.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    © 2026 Cruz Roja Peruana - Filial Arequipa<br>
+    Sistema de Gestión de Convocatorias
+
+</footer>
+
+</body>
+</html>
