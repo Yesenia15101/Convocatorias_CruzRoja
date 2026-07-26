@@ -1,0 +1,13 @@
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\aplicacion\PostulacionServicioAplicacion.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\entities\Postulacion.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\entities\Voluntario.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\enums\EstadoPostulacion.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\repositories\IPostulacionRepositorio.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\dominio\valueobjects\Perfil.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\infraestructura\PostulacionRepositorioImpl.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc1_usuarios\presentacion\PostulacionController.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\dominio\entities\Convocatoria.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\dominio\repositories\IConvocatoriaRepositorio.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\bc2_convocatorias\infraestructura\ConvocatoriaRepositorioImpl.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\ConvocatoriaController.java
+D:\UNSA\IS1\TIF\FINAL\Convocatorias_CruzRoja\demo\src\main\java\com\example\demo\DemoApplication.java
