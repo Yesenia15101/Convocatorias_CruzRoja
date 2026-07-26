@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Registrar Postulante</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Montserrat,sans-serif;background:#f5f5f5;color:#333;}
+header{background:#d71920;color:white;padding:30px;text-align:center;}
+.container{width:90%;max-width:600px;margin:40px auto;background:white;padding:35px;border-radius:14px;box-shadow:0 8px 18px rgba(0,0,0,.10);}
+label{display:block;margin:16px 0 6px;font-weight:600;font-size:14px;}
+input,select{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;font-family:inherit;}
+button{width:100%;margin-top:24px;padding:13px;border:none;background:#d71920;color:white;font-weight:bold;border-radius:8px;cursor:pointer;}
+button:hover{background:#b51319;}
+</style>
+</head>
+<body>
+<header><h1>Registrar Postulante</h1></header>
+<div class="container">
+  <form th:action="@{/postulantes}" method="post">
+    <label>Nombre completo</label>
+    <input type="text" name="nombreCompleto" required>
+
+    <label>DNI</label>
+    <input type="text" name="dni" required>
+
+    <label>Convocatoria</label>
+    <select name="convocatoriaId" required>
+      <option th:each="c : ${convocatorias}" th:value="${c.id}" th:text="${c.nombre}"></option>
+    </select>
+
+    <label>Nivel de formación</label>
+    <input type="text" name="nivelFormacion" placeholder="Ej: Técnico, Bachiller">
+
+    <label>Especialidad</label>
+    <input type="text" name="especialidad" placeholder="Ej: Enfermería">
+
+    <label>Habilidades (separadas por coma)</label>
+    <input type="text" name="habilidades" placeholder="Primeros auxilios, RCP, Conducción">
+
+    <label>Disponibilidad</label>
+    <input type="text" name="disponibilidad" placeholder="Ej: Fines de semana">
+
+    <button type="submit">Registrar postulante</button>
+  </form>
+</div>
+</body>
+</html>
