@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import bc3_inscripciones.presentacion.requests.InscripcionRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /** API REST de la gestión de inscripciones. */
 @RestController
@@ -30,6 +33,18 @@ public final class InscripcionController {
     @GetMapping
     public List<InscripcionDTO> listar() throws IOException {
         return servicio.listarInscripciones();
+    }
+
+    @PostMapping
+    public ResponseEntity<InscripcionDTO> registrar(
+            @RequestBody InscripcionRequest request) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(servicio.registrar(request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable long id) throws IOException {
+        servicio.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/estado")
@@ -50,9 +65,9 @@ public final class InscripcionController {
     }
 
     @ExceptionHandler(IOException.class)
-    public ResponseEntity<Map<String, String>> errorPersistencia() {
+    public ResponseEntity<Map<String, String>> errorPersistencia(IOException exception) {
         return error(HttpStatus.INTERNAL_SERVER_ERROR,
-                "No se pudo acceder a la tabla de inscripciones");
+                "No se pudo acceder a la tabla de inscripciones: " + exception.getMessage());
     }
 
     private static ResponseEntity<Map<String, String>> error(

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import bc3_inscripciones.presentacion.requests.InscripcionRequest;
+import java.time.LocalDate;
 
 /**
  * Servicio de aplicación.
@@ -45,6 +47,34 @@ public final class InscripcionServicioAplicacion implements IInscripcionServicio
         inscripcion.cambiarEstado(estado);
         repositorio.actualizar(inscripcion);
         return InscripcionDTO.desde(inscripcion);
+    }
+
+    @Override
+    public InscripcionDTO registrar(InscripcionRequest request) throws IOException {
+        if (request == null) {
+            throw new IllegalArgumentException("Los datos son obligatorios");
+        }
+        List<Inscripcion> actuales = repositorio.listarTodas();
+        boolean duplicada = actuales.stream().anyMatch(i ->
+                i.getDni().equals(request.dni())
+                        && i.getCodigoConvocatoria().equalsIgnoreCase(request.codigoConvocatoria()));
+        if (duplicada) {
+            throw new IllegalArgumentException("El voluntario ya está inscrito en esta convocatoria");
+        }
+        long id = actuales.stream().mapToLong(Inscripcion::getId).max().orElse(0) + 1;
+        Inscripcion nueva = new Inscripcion(
+                id, request.nombre(), request.dni(), request.correo(), request.telefono(),
+                request.convocatoria(), request.codigoConvocatoria(), LocalDate.now(),
+                EstadoInscripcion.PENDIENTE, request.experiencia());
+        repositorio.guardar(nueva);
+        return InscripcionDTO.desde(nueva);
+    }
+
+    @Override
+    public void eliminar(long id) throws IOException {
+        validarIdentificador(id);
+        obtenerInscripcion(id);
+        repositorio.eliminar(id);
     }
 
     private Inscripcion obtenerInscripcion(long id) throws IOException {

@@ -13,4 +13,8 @@ public interface IInscripcionRepositorio {
     Optional<Inscripcion> buscarPorId(long id) throws IOException;
 
     void actualizar(Inscripcion inscripcion) throws IOException;
+
+    void guardar(Inscripcion inscripcion) throws IOException;
+
+    void eliminar(long id) throws IOException;
 }

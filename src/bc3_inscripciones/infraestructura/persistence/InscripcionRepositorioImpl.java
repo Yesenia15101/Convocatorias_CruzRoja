@@ -93,6 +93,32 @@ public final class InscripcionRepositorioImpl implements IInscripcionRepositorio
         }
     }
 
+    @Override
+    public void guardar(Inscripcion inscripcion) throws IOException {
+        bloqueo.writeLock().lock();
+        try {
+            List<Inscripcion> inscripciones = leerTabla();
+            inscripciones.add(inscripcion);
+            escribirTabla(inscripciones);
+        } finally {
+            bloqueo.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void eliminar(long id) throws IOException {
+        bloqueo.writeLock().lock();
+        try {
+            List<Inscripcion> inscripciones = leerTabla();
+            if (!inscripciones.removeIf(i -> i.getId() == id)) {
+                throw new IllegalArgumentException("No existe una inscripción con id " + id);
+            }
+            escribirTabla(inscripciones);
+        } finally {
+            bloqueo.writeLock().unlock();
+        }
+    }
+
     private void inicializarTabla() throws IOException {
         bloqueo.writeLock().lock();
         try {

@@ -5,7 +5,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /** Punto de entrada de la gestión de inscripciones. */
-@SpringBootApplication(scanBasePackages = "bc3_inscripciones")
+@SpringBootApplication(scanBasePackages = {"bc2_convocatorias", "bc3_inscripciones"})
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

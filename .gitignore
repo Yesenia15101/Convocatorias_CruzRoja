@@ -27,3 +27,6 @@ build/
 
 # Visual Studio Code
 .vscode/
+
+# Tablas locales generadas por la aplicación
+resources/database/*.tsv

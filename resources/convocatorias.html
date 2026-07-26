@@ -1,409 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Convocatorias Disponibles</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Horarios de convocatorias</title>
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Montserrat,sans-serif;
-    background:#f5f5f5;
-    color:#333;
-}
-
-/* ENCABEZADO */
-
-header{
-    background:#d71920;
-    color:white;
-    padding:35px;
-    text-align:center;
-    box-shadow:0 3px 8px rgba(0,0,0,.2);
-}
-
-header h1{
-    font-size:34px;
-}
-
-header p{
-    margin-top:10px;
-    opacity:.95;
-}
-
-/* CONTENEDOR */
-
-.container{
-
-    width:90%;
-    max-width:1300px;
-    margin:auto;
-    padding:45px 0;
-
-}
-
-/* GRID */
-
-.grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-
-    gap:30px;
-
-}
-
-/* TARJETAS */
-
-.card{
-
-    background:white;
-
-    border-radius:14px;
-
-    overflow:hidden;
-
-    box-shadow:0 8px 18px rgba(0,0,0,.10);
-
-    transition:.3s;
-
-}
-
-.card:hover{
-
-    transform:translateY(-6px);
-
-    box-shadow:0 14px 30px rgba(0,0,0,.18);
-
-}
-
-.card-header{
-
-    background:#d71920;
-
-    color:white;
-
-    padding:18px;
-
-}
-
-.card-header h2{
-
-    font-size:22px;
-
-}
-
-.card-body{
-
-    padding:22px;
-
-}
-
-.info{
-
-    display:flex;
-
-    align-items:center;
-
-    margin:14px 0;
-
-    font-size:15px;
-
-}
-
-.icon{
-
-    width:30px;
-
-    font-size:18px;
-
-}
-
-.estado{
-
-    display:inline-block;
-
-    margin-top:15px;
-
-    padding:8px 16px;
-
-    border-radius:20px;
-
-    font-size:13px;
-
-    font-weight:bold;
-
-}
-
-.disponible{
-
-    background:#dff5df;
-
-    color:#1b7a1b;
-
-}
-
-.lleno{
-
-    background:#ffdada;
-
-    color:#b10000;
-
-}
-
-.card-footer{
-
-    padding:20px;
-
-    border-top:1px solid #eee;
-
-}
-
-button{
-
-    width:100%;
-
-    padding:13px;
-
-    border:none;
-
-    background:#d71920;
-
-    color:white;
-
-    font-weight:bold;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-button:hover{
-
-    background:#b51319;
-
-}
-
+:root{font-family:Arial,sans-serif;color:#303030;background:#f5f5f5}body{margin:0}
+header{background:#d71920;color:#fff;padding:28px 6%}main{width:90%;max-width:1200px;margin:25px auto}
+.panel,.card{background:#fff;border-radius:12px;box-shadow:0 6px 18px #0002}.panel{padding:20px;margin-bottom:22px}
+.login{display:flex;flex-wrap:wrap;gap:10px;align-items:end}label{display:flex;flex-direction:column;gap:5px;font-weight:bold}
+input{padding:10px;border:1px solid #bbb;border-radius:7px}.examples{font-size:13px;background:#f5f5f5;padding:10px}
+.session{display:flex;justify-content:space-between;align-items:center}.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{overflow:hidden}.card h2{background:#d71920;color:#fff;margin:0;padding:18px;font-size:20px}
+.body{padding:18px}.line{margin:11px 0}.warning{background:#fff1c7;color:#805700;padding:11px;border-radius:7px;font-weight:bold}
+.duration{color:#176b25;font-weight:bold}button{border:0;border-radius:7px;padding:11px 14px;
+background:#d71920;color:#fff;font-weight:bold;cursor:pointer}.card button{width:100%}.secondary{background:#555}
+.role{background:#dceeff;color:#124f86;padding:7px 11px;border-radius:15px;font-weight:bold}
+dialog{border:0;border-radius:14px;box-shadow:0 10px 35px #0005;max-width:580px;width:88%}
+dialog::backdrop{background:#0008}.detail{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.detail div{background:#f6f6f6;padding:12px;border-radius:7px}.detail b{display:block;font-size:12px;color:#666;margin-bottom:6px}
+.editor{margin-top:18px;padding:15px;border:2px solid #d71920;border-radius:9px}.editor .row{display:flex;gap:10px;align-items:end}
+#message{color:#a00;font-weight:bold}
 </style>
-
 </head>
 <body>
-
-<header>
-
-<h1>Convocatorias Disponibles</h1>
-
-<p>Inscríbete como voluntario en las campañas de la Cruz Roja Peruana</p>
-
-</header>
-
-<div class="container">
-
-<div class="grid">
-
-<!-- Convocatoria 1 -->
-
-<div class="card">
-
-<div class="card-header">
-
-<h2>Campaña de Donación de Sangre</h2>
-
-</div>
-
-<div class="card-body">
-
-<div class="info">
-<div class="icon">📍</div>
-<div>Arequipa - Cercado</div>
-</div>
-
-<div class="info">
-<div class="icon">📅</div>
-<div>25 Julio 2026</div>
-</div>
-
-<div class="info">
-<div class="icon">🕒</div>
-<div>08:00 - 14:00</div>
-</div>
-
-<div class="info">
-<div class="icon">👥</div>
-<div>42 registrados</div>
-</div>
-
-<span class="estado disponible">
-Disponible
-</span>
-
-</div>
-
-<div class="card-footer">
-
-<button>Ver convocatoria</button>
-
-</div>
-
-</div>
-
-<!-- Convocatoria 2 -->
-
-<div class="card">
-
-<div class="card-header">
-
-<h2>Apoyo en Emergencias</h2>
-
-</div>
-
-<div class="card-body">
-
-<div class="info">
-<div class="icon">📍</div>
-<div>Camaná</div>
-</div>
-
-<div class="info">
-<div class="icon">📅</div>
-<div>28 Julio 2026</div>
-</div>
-
-<div class="info">
-<div class="icon">🕒</div>
-<div>07:30 - 17:00</div>
-</div>
-
-<div class="info">
-<div class="icon">👥</div>
-<div>61 registrados</div>
-</div>
-
-<span class="estado disponible">
-Disponible
-</span>
-
-</div>
-
-<div class="card-footer">
-
-<button>Ver convocatoria</button>
-
-</div>
-
-</div>
-
-<!-- Convocatoria 3 -->
-
-<div class="card">
-
-<div class="card-header">
-
-<h2>Capacitación en Primeros Auxilios</h2>
-
-</div>
-
-<div class="card-body">
-
-<div class="info">
-<div class="icon">📍</div>
-<div>Yanahuara</div>
-</div>
-
-<div class="info">
-<div class="icon">📅</div>
-<div>30 Julio 2026</div>
-</div>
-
-<div class="info">
-<div class="icon">🕒</div>
-<div>09:00 - 13:00</div>
-</div>
-
-<div class="info">
-<div class="icon">👥</div>
-<div>80 registrados</div>
-</div>
-
-<span class="estado lleno">
-Cupos completos
-</span>
-
-</div>
-
-<div class="card-footer">
-
-<button disabled style="background:#999;cursor:not-allowed;">
-Sin cupos
-</button>
-
-</div>
-
-</div>
-
-<!-- Convocatoria 4 -->
-
-<div class="card">
-
-<div class="card-header">
-
-<h2>Campaña Médica Comunitaria</h2>
-
-</div>
-
-<div class="card-body">
-
-<div class="info">
-<div class="icon">📍</div>
-<div>Cerro Colorado</div>
-</div>
-
-<div class="info">
-<div class="icon">📅</div>
-<div>05 Agosto 2026</div>
-</div>
-
-<div class="info">
-<div class="icon">🕒</div>
-<div>08:30 - 15:00</div>
-</div>
-
-<div class="info">
-<div class="icon">👥</div>
-<div>19 registrados</div>
-</div>
-
-<span class="estado disponible">
-Disponible
-</span>
-
-</div>
-
-<div class="card-footer">
-
-<button>Ver convocatoria</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-</html>
+<header><h1>Convocatorias y horarios</h1><p>Acceso para voluntarios inscritos y reclutadores graduados.</p></header>
+<main>
+<section id="loginPanel" class="panel">
+ <h2>Iniciar sesión</h2>
+ <form id="loginForm" class="login">
+  <label>Usuario<input id="user" required></label>
+  <label>Contraseña<input id="password" type="password" required></label>
+  <button>Ingresar</button>
+ </form>
+ <p class="examples"><b>Cuentas de demostración:</b><br>
+ voluntario / voluntario123 · graduado / graduado123 · reclutador / reclutador123</p>
+</section>
+<section id="sessionPanel" class="panel session hidden">
+ <div><b id="sessionName"></b> <span id="sessionRole" class="role"></span></div>
+ <button id="logout" class="secondary">Cerrar sesión</button>
+</section>
+<p id="message"></p><section id="cards" class="grid"></section>
+</main>
+<dialog id="modal"><h2 id="detailName"></h2><div id="detail" class="detail"></div>
+ <section id="editor" class="editor hidden"><h3>Editar horario — solo reclutador</h3>
+  <div class="row"><label>Inicio<input id="start" type="time"></label>
+  <label>Fin<input id="end" type="time"></label><button id="saveSchedule">Guardar</button></div>
+  <p id="editorMessage"></p>
+ </section>
+ <button class="secondary" style="margin-top:18px;width:100%" onclick="modal.close()">Cerrar</button>
+</dialog>
+<script>
+const cards=document.getElementById("cards"),modal=document.getElementById("modal");
+let session=null,currentCode=null;
+function esc(v){const d=document.createElement("div");d.textContent=v??"";return d.innerHTML}
+function dateLabel(v){if(!v||v==="Fecha por definir")return v;
+ return new Intl.DateTimeFormat("es-PE",{dateStyle:"long",timeZone:"UTC"}).format(new Date(v+"T00:00:00Z"))}
+async function request(url,options={}){const r=await fetch(url,{headers:{"Content-Type":"application/json"},...options});
+ if(!r.ok){const b=await r.json().catch(()=>({message:"Acceso denegado"}));
+  throw Error(b.detail||b.message||b.error||"Acceso denegado")}return r.status===204?null:r.json()}
+function schedule(c){return c.horarioDefinido?`<div class="line">🕒 ${c.horaInicio} – ${c.horaFinalizacion}</div>
+ <div class="line duration">Duración: ${c.duracionTotal}</div>`:`<div class="warning">${esc(c.mensajeHorario)}</div>`}
+async function load(){const calls=await request("/api/convocatorias");cards.innerHTML=calls.map(c=>
+ `<article class="card"><h2>${esc(c.nombre)}</h2><div class="body"><div class="line">📅 ${esc(dateLabel(c.fechaServicio))}</div>
+ <div class="line">📍 ${esc(c.lugar)}</div>${schedule(c)}<button data-code="${c.codigo}">Ver convocatoria</button>
+ </div></article>`).join("");cards.querySelectorAll("button").forEach(b=>b.onclick=()=>show(b.dataset.code))}
+async function show(code){currentCode=code;const c=await request(`/api/convocatorias/${code}`);
+ document.getElementById("detailName").textContent=c.nombre;document.getElementById("detail").innerHTML=`
+ <div><b>FECHA</b>${esc(dateLabel(c.fechaServicio))}</div><div><b>LUGAR</b>${esc(c.lugar)}</div>
+ <div><b>INICIO</b>${esc(c.horaInicio||"No definida")}</div><div><b>FINALIZACIÓN</b>${esc(c.horaFinalizacion||"No definida")}</div>
+ <div><b>DURACIÓN</b>${esc(c.duracionTotal||c.mensajeHorario)}</div><div><b>ESTADO</b>${esc(c.estado.replaceAll("_"," "))}</div>`;
+ document.getElementById("editor").classList.toggle("hidden",!session.puedeEditarHorarios);
+ document.getElementById("start").value=c.horaInicio||"";document.getElementById("end").value=c.horaFinalizacion||"";modal.showModal()}
+function showSession(s){session=s;document.getElementById("loginPanel").classList.add("hidden");
+ document.getElementById("sessionPanel").classList.remove("hidden");document.getElementById("sessionName").textContent=s.nombre;
+ document.getElementById("sessionRole").textContent=s.rol+(s.rol==="RECLUTADOR"?" · GRADUADO":"");load().catch(error=>message.textContent=error.message)}
+document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();try{showSession(await request("/api/sesion",
+ {method:"POST",body:JSON.stringify({usuario:user.value,clave:password.value})}));message.textContent=""}catch(error){message.textContent=error.message}};
+document.getElementById("logout").onclick=async()=>{await request("/api/sesion",{method:"DELETE"});location.reload()};
+document.getElementById("saveSchedule").onclick=async()=>{try{const c=await request(`/api/convocatorias/${currentCode}/horario`,
+ {method:"PATCH",body:JSON.stringify({horaInicio:start.value,horaFin:end.value})});
+ document.getElementById("editorMessage").textContent=`Guardado: ${c.duracionTotal}`;await load();await show(currentCode)}
+ catch(error){document.getElementById("editorMessage").textContent=error.message}};
+request("/api/sesion").then(showSession).catch(()=>{});
+</script></body></html>
