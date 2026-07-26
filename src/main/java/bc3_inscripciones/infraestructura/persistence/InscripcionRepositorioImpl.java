@@ -60,4 +60,13 @@ public class InscripcionRepositorioImpl implements IInscripcionRepositorio {
                         && inscripcion.getConvocatoriaId().equals(convocatoriaId)
                         && inscripcion.getEstado() != EstadoInscripcion.RECHAZADA);
     }
+
+    @Override
+    public long contarActivasPorConvocatoria(Long convocatoriaId) {
+        return almacen.values().stream()
+                .filter(inscripcion ->
+                        inscripcion.getConvocatoriaId().equals(convocatoriaId)
+                        && inscripcion.getEstado() != EstadoInscripcion.RECHAZADA)
+                .count();
+    }
 }

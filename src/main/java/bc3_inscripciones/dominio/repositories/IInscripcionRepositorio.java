@@ -46,4 +46,11 @@ public interface IInscripcionRepositorio {
      * se inscriba dos veces en la misma convocatoria.
      */
     boolean existeInscripcionActiva(String dniVoluntario, Long convocatoriaId);
+
+    /**
+     * Cuenta las inscripciones activas (no rechazadas) de una convocatoria.
+     * Usado por BC2 (Convocatorias) para calcular si se alcanzó el mínimo
+     * de participantes, a través del puerto IConteoInscritosProveedor.
+     */
+    long contarActivasPorConvocatoria(Long convocatoriaId);
 }

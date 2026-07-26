@@ -13,17 +13,7 @@ import bc3_inscripciones.dominio.factories.InscripcionFabrica;
 import bc3_inscripciones.dominio.repositories.IInscripcionRepositorio;
 import bc3_inscripciones.presentacion.requests.InscripcionRequest;
 
-/**
- * Servicio de aplicación (caso de uso) de Inscripciones.
- *
- * Orquesta el flujo: valida la solicitud, delega la creación del
- * agregado a la fábrica de dominio, persiste a través del repositorio
- * y devuelve un DTO a la capa de presentación. No contiene reglas de
- * negocio propias del agregado (esas viven en Inscripcion/InscripcionFabrica),
- * cumpliendo el Principio de Responsabilidad Única.
- *
- * @author Natalie Marleny Lazo Paxi
- */
+
 @Service
 public class InscripcionServicioAplicacion implements IInscripcionServicio {
 
@@ -71,6 +61,11 @@ public class InscripcionServicioAplicacion implements IInscripcionServicio {
         Inscripcion inscripcion = buscarInscripcionOLanzarError(id);
         inscripcion.rechazar();
         return InscripcionDTO.desde(inscripcionRepositorio.guardar(inscripcion));
+    }
+
+    @Override
+    public long contarActivasPorConvocatoria(Long convocatoriaId) {
+        return inscripcionRepositorio.contarActivasPorConvocatoria(convocatoriaId);
     }
 
     private Inscripcion buscarInscripcionOLanzarError(Long id) {

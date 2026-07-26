@@ -325,9 +325,10 @@
         <img src="https://www.cruzrojaarequipa.org.pe/wp-content/uploads/2020/08/logotipo-header-crpfa.png" alt="Cruz Roja Peruana Arequipa">
       </a>
       <ul class="menu">
-        <li><a href="">Inicio</a></li>
-        <li><a href="">Voluntariado</a></li>
-        <li><a href="">Visualizar</a></li>
+        <li><a href="main.html">HomePage</a></li>
+        <li><a href="convocatorias.html">Convocatorias</a></li>
+        <li><a href="inscripcion.html">Inscribirse</a></li>
+        <li><a href="estado_inscripcion.html">Estado Inscripción</a></li>
       </ul>
     </div>
   </div>
@@ -369,6 +370,8 @@
           <div><strong>Vacantes</strong><span id="detalleVacantes"></span></div>
           <div><strong>Inscripciones hasta</strong><span id="detalleFecha"></span></div>
         </div>
+
+        <div id="avisoMinimoParticipantes" class="oculto" style="margin: 10px 0; padding: 10px; border-radius: 6px; font-size: 14px;"></div>
 
         <h4>Verificación de requisitos</h4>
         <p style="font-size:13px; color:#666; margin:8px 0 15px 0;">
@@ -426,6 +429,7 @@
   <script>
 
     const URL_BASE_API = "/api/inscripciones";
+    const URL_BASE_API_CONTADOR = "/api/inscripciones/convocatoria";
 
     const convocatorias = [
       {
@@ -433,6 +437,7 @@
         titulo: "Voluntariado 2026 - A",
         area: "Voluntariado general",
         vacantes: 40,
+        cantidadMinima: 10,
         fechaLimite: "07/02/2026",
         descripcion: "Convocatoria general para nuevos voluntarios de la Cruz Roja Peruana Filial Arequipa.",
         requisitos: [
@@ -447,6 +452,7 @@
         titulo: "Brigadas de Primeros Auxilios",
         area: "Salud y emergencias",
         vacantes: 15,
+        cantidadMinima: 6,
         fechaLimite: "20/02/2026",
         descripcion: "Voluntarios capacitados para brindar apoyo en primeros auxilios en eventos y emergencias.",
         requisitos: [
@@ -460,6 +466,7 @@
         titulo: "Área de Comunicaciones y Marketing",
         area: "Voluntariado profesional",
         vacantes: 5,
+        cantidadMinima: 3,
         fechaLimite: "28/02/2026",
         descripcion: "Apoyo en la difusión de campañas y contenido para redes sociales de la institución.",
         requisitos: [
@@ -503,6 +510,47 @@
        3. MOSTRAR EL DETALLE DE UNA CONVOCATORIA
     ================================================================= */
 
+    /* =================================================================
+       2.1 ESTADO DEL MÍNIMO DE PARTICIPANTES
+          cantidadMinima vive aquí en el HTML (igual que "vacantes");
+          el conteo real de inscritos sí viene del backend, para que
+          sea el mismo número para todos los voluntarios.
+    ================================================================= */
+
+    async function actualizarEstadoMinimoParticipantes(convocatoria) {
+      const contenedorAviso = document.getElementById("avisoMinimoParticipantes");
+
+      try {
+        const respuesta = await fetch(URL_BASE_API_CONTADOR + "/" + convocatoria.id + "/contador");
+        if (!respuesta.ok) {
+          contenedorAviso.classList.add("oculto");
+          return;
+        }
+
+        const inscritosActuales = await respuesta.json(); // número (long)
+        const minimoAlcanzado = inscritosActuales >= convocatoria.cantidadMinima;
+        const faltantes = Math.max(convocatoria.cantidadMinima - inscritosActuales, 0);
+
+        if (minimoAlcanzado) {
+          contenedorAviso.style.background = "#e6f4ea";
+          contenedorAviso.style.color = "#1e7e34";
+          contenedorAviso.textContent =
+            "✅ Mínimo de participantes alcanzado (" + inscritosActuales +
+            "/" + convocatoria.cantidadMinima + ").";
+        } else {
+          contenedorAviso.style.background = "#fff3cd";
+          contenedorAviso.style.color = "#856404";
+          contenedorAviso.textContent =
+            "⚠️ Aún faltan " + faltantes + " participante(s) para alcanzar el mínimo requerido (" +
+            inscritosActuales + "/" + convocatoria.cantidadMinima + ").";
+        }
+        contenedorAviso.classList.remove("oculto");
+      } catch (error) {
+        // Si el backend no responde, no bloqueamos el resto de la vista.
+        contenedorAviso.classList.add("oculto");
+      }
+    }
+
     function verDetalle(id) {
       // Buscamos la convocatoria seleccionada por su id
       convocatoriaSeleccionada = convocatorias.find(function (c) {
@@ -540,6 +588,8 @@
       document.getElementById("vista-lista").classList.add("oculto");
       document.getElementById("vista-detalle").classList.remove("oculto");
       window.scrollTo(0, 0);
+
+      actualizarEstadoMinimoParticipantes(convocatoriaSeleccionada);
     }
 
 
@@ -550,6 +600,7 @@
     document.getElementById("btnVolver").addEventListener("click", function () {
       document.getElementById("vista-detalle").classList.add("oculto");
       document.getElementById("vista-lista").classList.remove("oculto");
+      mostrarListaConvocatorias(); // refresca el número de vacantes en las tarjetas
     });
 
 
@@ -619,6 +670,17 @@
       return respuesta.json(); // InscripcionDTO
     }
 
+    function descontarVacante(convocatoria) {
+      // NOTA: esto solo actualiza el número en memoria del navegador.
+      // No se persiste en el backend porque bc2_convocatorias (que
+      // debería dueño de "vacantes") todavía no está implementado.
+      // Al recargar la página, vuelve al valor original.
+      if (convocatoria.vacantes > 0) {
+        convocatoria.vacantes -= 1;
+      }
+      document.getElementById("detalleVacantes").textContent = convocatoria.vacantes;
+    }
+
     function mostrarInscripcionExitosa(inscripcionCreada) {
       const mensaje = document.getElementById("mensajeConfirmacion");
       mensaje.textContent =
@@ -627,6 +689,9 @@
         inscripcionCreada.estadoDescripcion + ".";
       mensaje.style.display = "block";
       document.getElementById("btnInscribirme").disabled = true;
+
+      descontarVacante(convocatoriaSeleccionada);
+      actualizarEstadoMinimoParticipantes(convocatoriaSeleccionada);
     }
 
     document.getElementById("btnInscribirme").addEventListener("click", async function () {

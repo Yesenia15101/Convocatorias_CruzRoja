@@ -89,6 +89,16 @@ public class InscripcionController {
     }
 
     /**
+     * Cuenta los inscritos activos de una convocatoria. inscripcion.html
+     * lo usa para comparar contra el mínimo de participantes requerido
+     * (cantidadMinima, que hoy vive en el propio HTML).
+     */
+    @GetMapping("/convocatoria/{convocatoriaId}/contador")
+    public ResponseEntity<Long> contarPorConvocatoria(@PathVariable Long convocatoriaId) {
+        return ResponseEntity.ok(inscripcionServicio.contarActivasPorConvocatoria(convocatoriaId));
+    }
+
+    /**
      * Traduce la regla de negocio "inscripción duplicada" a HTTP 409 (Conflict),
      * con un mensaje claro para que el frontend lo muestre al voluntario.
      */

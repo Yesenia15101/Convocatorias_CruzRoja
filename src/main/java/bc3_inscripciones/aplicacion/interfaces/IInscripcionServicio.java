@@ -42,4 +42,11 @@ public interface IInscripcionServicio {
      * Rechaza una inscripción pendiente.
      */
     InscripcionDTO rechazarInscripcion(Long id);
+
+    /**
+     * Cuenta cuántos voluntarios están inscritos actualmente (activos,
+     * no rechazados) en una convocatoria. Usado por inscripcion.html
+     * para comparar contra el mínimo de participantes requerido.
+     */
+    long contarActivasPorConvocatoria(Long convocatoriaId);
 }
