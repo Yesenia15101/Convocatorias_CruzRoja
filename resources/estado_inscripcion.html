@@ -333,11 +333,20 @@
     "use strict";
 
     /* =================================================================
-       1. DATOS DE EJEMPLO (simulan la respuesta del backend — se
-          reemplazarán por un fetch al InscripcionController REST)
+       1. CONEXIÓN CON EL BACKEND REAL
+          fetch() -> InscripcionController -> InscripcionServicioAplicacion
+          -> Inscripcion (dominio) -> IInscripcionRepositorio (infraestructura)
+
+          NOTA: el DTO que devuelve el backend (InscripcionDTO) solo trae
+          "convocatoriaId" (numérico), no el título/área de la convocatoria.
+          Como esos datos aún viven como catálogo estático en inscripcion.html,
+          los replicamos aquí (mismo "id") únicamente para poder mostrar el
+          título y el área en la tabla. El día que exista un endpoint de
+          convocatorias en el backend, este mapeo se reemplaza por un fetch.
     ================================================================= */
 
     const DNI_LONGITUD = 8;
+    const URL_BASE_API = "/api/inscripciones";
 
     const ESTADOS = {
       CONFIRMADA: { texto: "Confirmada", clase: "estado-confirmada" },
@@ -345,29 +354,17 @@
       RECHAZADA:  { texto: "Rechazada",  clase: "estado-rechazada" }
     };
 
-    const inscripcionesRegistradas = [
-      {
-        dni: "12345678",
-        convocatoria: "Voluntariado 2026 - A",
-        fechaInscripcion: "10/07/2026",
-        servicio: "Voluntariado general",
-        estado: "CONFIRMADA"
-      },
-      {
-        dni: "12345678",
-        convocatoria: "Brigadas de Primeros Auxilios",
-        fechaInscripcion: "12/07/2026",
-        servicio: "Salud y emergencias",
-        estado: "PENDIENTE"
-      },
-      {
-        dni: "87654321",
-        convocatoria: "Área de Comunicaciones y Marketing",
-        fechaInscripcion: "05/07/2026",
-        servicio: "Voluntariado profesional",
-        estado: "RECHAZADA"
-      }
+    const convocatorias = [
+      { id: 1, titulo: "Voluntariado 2026 - A", area: "Voluntariado general" },
+      { id: 2, titulo: "Brigadas de Primeros Auxilios", area: "Salud y emergencias" },
+      { id: 3, titulo: "Área de Comunicaciones y Marketing", area: "Voluntariado profesional" }
     ];
+
+    function obtenerConvocatoria(convocatoriaId) {
+      return convocatorias.find(function (c) {
+        return c.id === convocatoriaId;
+      });
+    }
 
     /* =================================================================
        2. VALIDACIÓN
@@ -381,10 +378,15 @@
        3. CONSULTA Y RENDERIZADO
     ================================================================= */
 
-    function buscarInscripcionesPorDni(dni) {
-      return inscripcionesRegistradas.filter(function (inscripcion) {
-        return inscripcion.dni === dni;
-      });
+    async function buscarInscripcionesPorDni(dni) {
+      const respuesta = await fetch(URL_BASE_API + "/voluntario/" + dni);
+
+      if (!respuesta.ok) {
+        const mensajeError = await respuesta.text();
+        throw new Error(mensajeError || "No se pudo consultar el estado de inscripción.");
+      }
+
+      return respuesta.json(); // InscripcionDTO[]
     }
 
     function crearCeldaTexto(texto) {
@@ -422,10 +424,14 @@
       mensajeVacio.classList.add("oculto");
 
       inscripciones.forEach(function (inscripcion) {
+        const convocatoria = obtenerConvocatoria(inscripcion.convocatoriaId);
+        const tituloConvocatoria = convocatoria ? convocatoria.titulo : "Convocatoria #" + inscripcion.convocatoriaId;
+        const areaConvocatoria = convocatoria ? convocatoria.area : "-";
+
         const fila = document.createElement("tr");
-        fila.appendChild(crearCeldaTexto(inscripcion.convocatoria));
+        fila.appendChild(crearCeldaTexto(tituloConvocatoria));
         fila.appendChild(crearCeldaTexto(inscripcion.fechaInscripcion));
-        fila.appendChild(crearCeldaTexto(inscripcion.servicio));
+        fila.appendChild(crearCeldaTexto(areaConvocatoria));
         fila.appendChild(crearCeldaEstado(inscripcion.estado));
         cuerpoTabla.appendChild(fila);
       });
@@ -435,19 +441,33 @@
        4. EVENTOS
     ================================================================= */
 
-    document.getElementById("btnConsultar").addEventListener("click", function () {
+    document.getElementById("btnConsultar").addEventListener("click", async function () {
       const avisoDni = document.getElementById("avisoDni");
       const dni = document.getElementById("inputDni").value.trim();
 
       if (!esDniValido(dni)) {
         avisoDni.style.display = "block";
+        avisoDni.textContent = "Ingresa un DNI válido de 8 dígitos.";
         document.getElementById("seccionResultados").classList.add("oculto");
         return;
       }
 
       avisoDni.style.display = "none";
-      document.getElementById("seccionResultados").classList.remove("oculto");
-      renderizarInscripciones(buscarInscripcionesPorDni(dni));
+
+      const btnConsultar = document.getElementById("btnConsultar");
+      btnConsultar.disabled = true;
+
+      try {
+        const inscripciones = await buscarInscripcionesPorDni(dni);
+        document.getElementById("seccionResultados").classList.remove("oculto");
+        renderizarInscripciones(inscripciones);
+      } catch (error) {
+        avisoDni.textContent = error.message;
+        avisoDni.style.display = "block";
+        document.getElementById("seccionResultados").classList.add("oculto");
+      } finally {
+        btnConsultar.disabled = false;
+      }
     });
 
     document.getElementById("inputDni").addEventListener("keydown", function (evento) {
