@@ -1,4 +1,4 @@
-package bc2_convocatorias.presentacion.controllers;
+package app;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
