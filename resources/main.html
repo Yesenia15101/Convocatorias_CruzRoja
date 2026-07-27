@@ -1,39 +1,378 @@
-<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cruz Roja — Gestión de voluntariado</title>
-<style>
-:root{font-family:Arial,sans-serif;color:#292929;background:#f4f5f7}*{box-sizing:border-box}body{margin:0}
-header{background:#d71920;color:white;padding:28px 6%}header>div{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center}
-main{max-width:1150px;margin:28px auto;padding:0 18px}.panel,.card{background:white;border-radius:13px;padding:22px;box-shadow:0 4px 16px #0001}
-.login{display:flex;gap:12px;flex-wrap:wrap;align-items:end}label{display:flex;flex-direction:column;gap:5px;font-weight:bold}input{padding:10px;border:1px solid #bbb;border-radius:7px}
-button,.action{border:0;border-radius:8px;padding:11px 15px;background:#d71920;color:white;font-weight:bold;text-decoration:none;cursor:pointer}
-.secondary{background:#555}.hidden{display:none!important}.session{display:flex;justify-content:space-between;align-items:center}.badge{background:#ffe3e3;color:#a31318;padding:7px 11px;border-radius:18px}
-.grid{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:18px}.card h2{margin-top:0}.card p{min-height:44px;color:#555}.card .action{display:inline-block}
-.hint{font-size:13px;background:#f3f3f3;padding:10px;border-radius:7px}#message{color:#a00;font-weight:bold}
-</style><link rel="stylesheet" href="sistema.css">
-</head><body>
-<header><div><div><h1>Sistema de voluntariado</h1><p>Convocatorias, postulaciones, inscripciones y equipos en un solo lugar</p></div><b>Cruz Roja</b></div></header>
-<main>
-<section id="login" class="panel"><h2>Iniciar sesión</h2><form id="loginForm" class="login">
-<label>Usuario<input id="user" required></label><label>Contraseña<input id="pass" type="password" required></label><button>Ingresar</button>
-</form><p class="hint">voluntario / voluntario123 · graduado / graduado123 · reclutador / reclutador123 · jefatura / jefatura123</p><p id="message"></p></section>
-<section id="session" class="panel session hidden"><div>Bienvenido, <b id="name"></b> <span id="role" class="badge"></span></div><button id="logout" class="secondary">Cerrar sesión</button></section>
-<section id="modules" class="grid hidden"></section>
-</main><script>
-const catalog=[
- {roles:["VOLUNTARIO","GRADUADO","RECLUTADOR","JEFATURA"],title:"Convocatorias disponibles",text:"Consulta fechas, requisitos, horarios, duración y filtra según tu perfil.",url:"convocatorias.html"},
- {roles:["VOLUNTARIO","GRADUADO"],title:"Inscribirme",text:"Registra tu solicitud para participar en un servicio.",url:"inscripcion.html"},
- {roles:["VOLUNTARIO","GRADUADO"],title:"Estado de inscripción",text:"Consulta el resultado actualizado de tus solicitudes.",url:"estado_inscripcion.html"},
- {roles:["VOLUNTARIO","GRADUADO","RECLUTADOR"],title:"Mi perfil",text:"Revisa y actualiza formación, especialidad y habilidades.",url:"perfil_voluntario.html"},
- {roles:["GRADUADO","RECLUTADOR","JEFATURA"],title:"Equipo a cargo",text:"Consulta integrantes, participación y personas por orientar.",url:"equipo_asignado.html"},
- {roles:["RECLUTADOR","JEFATURA"],title:"Gestionar convocatorias",text:"Publica, edita o elimina convocatorias y filtra voluntarios compatibles.",url:"gestion_convocatorias.html"},
- {roles:["RECLUTADOR","JEFATURA"],title:"Postulantes",text:"Registra y revisa postulantes de las convocatorias.",url:"postulantes.html"},
- {roles:["RECLUTADOR","JEFATURA"],title:"Gestión de inscripciones",text:"Aprueba, rechaza o cancela inscripciones.",url:"gestion_inscripciones.html"},
- {roles:["VOLUNTARIO","GRADUADO","RECLUTADOR","JEFATURA"],title:"Mínimo de participantes",text:"Consulta el mínimo y el estado actualizado. La confirmación está reservada para reclutamiento y jefatura.",url:"verificacion_minimos.html"}
-];
-async function req(url,opt={}){const r=await fetch(url,{headers:{"Content-Type":"application/json"},...opt});const b=await r.json().catch(()=>({}));if(!r.ok)throw Error(b.detail||b.error||"Acceso denegado");return b}
-function show(s){login.classList.add("hidden");session.classList.remove("hidden");modules.classList.remove("hidden");name.textContent=s.nombre;role.textContent=s.rol;
- modules.innerHTML=catalog.filter(x=>x.roles.includes(s.rol)).map(x=>`<article class="card"><h2>${x.title}</h2><p>${x.text}</p><a class="action" href="${x.url}">Abrir módulo</a></article>`).join("")}
-loginForm.onsubmit=async e=>{e.preventDefault();try{show(await req("/api/sesion",{method:"POST",body:JSON.stringify({usuario:user.value,clave:pass.value})}));message.textContent=""}catch(x){message.textContent=x.message}};
-logout.onclick=async()=>{await req("/api/sesion",{method:"DELETE"});location.reload()};req("/api/sesion").then(show).catch(()=>{});
-</script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Convocatorias</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f5f5f5;
+        }
+
+        /* ===== Barra Superior ===== */
+        .top-bar{
+
+            background:white;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:15px 60px;
+
+        }
+
+        .top-logo img{
+
+            height:60px;
+
+        }
+
+        .top-info{
+
+            display:flex;
+
+            gap:40px;
+
+        }
+
+        .info-item{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            color:#444;
+
+            font-size:14px;
+
+        }
+
+        .info-item strong{
+
+            color:#c8102e;
+
+        }
+
+        header{
+            background:#c8102e;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px 60px;
+        }
+
+        .logo{
+            font-size:26px;
+            font-weight:bold;
+        }
+
+        nav ul{
+            list-style:none;
+            display:flex;
+            gap:35px;
+        }
+
+        nav a{
+            color:white;
+            text-decoration:none;
+            font-size:17px;
+            font-weight:bold;
+        }
+
+        nav a:hover{
+            text-decoration:underline;
+        }
+
+        /* ===== Banner Principal ===== */
+
+        .hero{
+
+            height:520px;
+
+            background:url("https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=1600") center/cover;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+        }
+
+        .hero-content{
+
+            background:rgba(255,255,255,0.9);
+
+            padding:40px;
+
+            text-align:center;
+
+            border-radius:10px;
+
+        }
+
+        .hero h1{
+
+            color:#c8102e;
+
+            font-size:42px;
+
+            margin-bottom:20px;
+
+        }
+
+        .hero p{
+
+            font-size:18px;
+
+            margin-bottom:30px;
+
+            color:#444;
+
+            max-width:700px;
+
+        }
+
+        .boton{
+
+            background:#c8102e;
+
+            color:white;
+
+            padding:15px 30px;
+
+            text-decoration:none;
+
+            border-radius:5px;
+
+            font-weight:bold;
+
+        }
+
+        .boton:hover{
+
+            background:#a10d25;
+
+        }
+
+        /* ===== Información ===== */
+
+        .info{
+
+            padding:60px 80px;
+
+            text-align:center;
+
+        }
+
+        .info h2{
+
+            color:#c8102e;
+
+            margin-bottom:40px;
+
+            font-size:32px;
+
+        }
+
+        .cards{
+
+            display:flex;
+
+            justify-content:center;
+
+            gap:30px;
+
+            flex-wrap:wrap;
+
+        }
+
+        .card{
+
+            width:300px;
+
+            background:white;
+
+            padding:25px;
+
+            border-radius:8px;
+
+            box-shadow:0px 2px 10px rgba(0,0,0,.1);
+
+        }
+
+        .card h3{
+
+            color:#c8102e;
+
+            margin-bottom:15px;
+
+        }
+
+        footer{
+
+            background:#333;
+
+            color:white;
+
+            text-align:center;
+
+            padding:20px;
+
+            margin-top:40px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="top-bar">
+
+    <div class="top-logo">
+        <img src="https://www.cruzrojaarequipa.org.pe/wp-content/uploads/2020/08/logotipo-header-crpfa.png"
+             alt="Cruz Roja">
+    </div>
+
+    <div class="top-info">
+
+        <div class="info-item">
+            📍
+            <div>
+                <strong>Dirección</strong><br>
+                Urb. Municipal Calle Castilla N°162<br>
+                Cercado, Arequipa
+            </div>
+        </div>
+
+        <div class="info-item">
+            ☎
+            <div>
+                <strong>Contacto</strong><br>
+                993 748 009<br>
+                (054) 204343
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<header>
+
+    <div class="logo">
+
+        Cruz Roja Arequipa
+
+    </div>
+
+    <nav>
+
+        <ul>
+
+            <li><a href="convocatorias.html">Convocatorias</a></li>
+            <li><a href="/login">Login</a></li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>Sistema de Gestión de Convocatorias</h1>
+
+        <p>
+
+            Bienvenido al sistema web de la Cruz Roja Peruana - Filial Arequipa.
+            Consulta las convocatorias disponibles e inscríbete como voluntario
+            de forma rápida y sencilla.
+
+        </p>
+
+        <a th:href="@{/convocatorias}" class="boton">
+
+            Ver Convocatorias
+
+        </a>
+
+    </div>
+
+</section>
+
+<section class="info">
+
+    <h2>¿Qué puedes hacer?</h2>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>📋 Convocatorias</h3>
+
+            <p>
+
+                Consulta todas las convocatorias vigentes y revisa
+                sus requisitos, fechas y detalles.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>📝 Inscripciones</h3>
+
+            <p>
+
+                Registra tu participación en las convocatorias
+                disponibles de manera sencilla.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>📅 Información</h3>
+
+            <p>
+
+                Mantente informado sobre las actividades
+                y procesos de selección.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    © 2026 Cruz Roja Peruana - Filial Arequipa<br>
+    Sistema de Gestión de Convocatorias
+
+</footer>
+
+</body>
+</html>
