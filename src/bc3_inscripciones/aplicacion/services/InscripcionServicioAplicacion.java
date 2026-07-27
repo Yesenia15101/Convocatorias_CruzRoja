@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import bc3_inscripciones.presentacion.requests.InscripcionRequest;
+import bc3_inscripciones.aplicacion.dto.RegistrarInscripcionComando;
 import java.time.LocalDate;
 
 /**
@@ -50,22 +50,23 @@ public final class InscripcionServicioAplicacion implements IInscripcionServicio
     }
 
     @Override
-    public InscripcionDTO registrar(InscripcionRequest request) throws IOException {
-        if (request == null) {
+    public InscripcionDTO registrar(RegistrarInscripcionComando comando) throws IOException {
+        if (comando == null) {
             throw new IllegalArgumentException("Los datos son obligatorios");
         }
         List<Inscripcion> actuales = repositorio.listarTodas();
         boolean duplicada = actuales.stream().anyMatch(i ->
-                i.getDni().equals(request.dni())
-                        && i.getCodigoConvocatoria().equalsIgnoreCase(request.codigoConvocatoria()));
+                i.getDni().equals(comando.dni())
+                        && i.getCodigoConvocatoria().equalsIgnoreCase(
+                                comando.codigoConvocatoria()));
         if (duplicada) {
             throw new IllegalArgumentException("El voluntario ya está inscrito en esta convocatoria");
         }
         long id = actuales.stream().mapToLong(Inscripcion::getId).max().orElse(0) + 1;
         Inscripcion nueva = new Inscripcion(
-                id, request.nombre(), request.dni(), request.correo(), request.telefono(),
-                request.convocatoria(), request.codigoConvocatoria(), LocalDate.now(),
-                EstadoInscripcion.PENDIENTE, request.experiencia());
+                id, comando.nombre(), comando.dni(), comando.correo(), comando.telefono(),
+                comando.convocatoria(), comando.codigoConvocatoria(), LocalDate.now(),
+                EstadoInscripcion.PENDIENTE, comando.experiencia());
         repositorio.guardar(nueva);
         return InscripcionDTO.desde(nueva);
     }

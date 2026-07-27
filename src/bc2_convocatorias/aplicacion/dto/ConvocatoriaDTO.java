@@ -16,5 +16,6 @@ public record ConvocatoriaDTO(
         String horaFinalizacion,
         String duracionTotal,
         boolean horarioDefinido,
-        String mensajeHorario) {
+        String mensajeHorario,
+        java.util.List<String> requisitos) {
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import bc2_convocatorias.aplicacion.services.AutorizacionConvocatoriaServicio;
 import jakarta.servlet.http.HttpSession;
+import bc2_convocatorias.presentacion.requests.ConvocatoriaRequest;
 
 @RestController
 @RequestMapping("/api/convocatorias")
@@ -30,6 +31,12 @@ public final class ConvocatoriaController {
         return servicio.listarVerificacionMinimos();
     }
 
+    @GetMapping("/disponibles")
+    public List<ConvocatoriaDTO> disponibles(
+            @RequestParam(defaultValue = "") String perfil) throws IOException {
+        return servicio.filtrarPorPerfil(perfil);
+    }
+
     @GetMapping
     public List<ConvocatoriaDTO> listarConvocatorias(HttpSession sesion) throws IOException {
         autorizacion.requerirAutenticado(sesion);
@@ -45,7 +52,9 @@ public final class ConvocatoriaController {
 
     @PatchMapping("/{codigo}/minimo")
     public ConvocatoriaDTO definirMinimo(
-            @PathVariable String codigo, @RequestBody MinimoRequest request) throws IOException {
+            @PathVariable String codigo, @RequestBody MinimoRequest request,
+            HttpSession sesion) throws IOException {
+        autorizacion.requerirGestionConvocatorias(sesion);
         return servicio.definirMinimo(codigo, request.minimoParticipantes());
     }
 
@@ -57,8 +66,34 @@ public final class ConvocatoriaController {
         return servicio.definirHorario(codigo, request.horaInicio(), request.horaFin());
     }
 
+    @PostMapping
+    public ResponseEntity<ConvocatoriaDTO> publicar(
+            @RequestBody ConvocatoriaRequest request, HttpSession sesion) throws IOException {
+        autorizacion.requerirGestionConvocatorias(sesion);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                servicio.publicar(request.aComando()));
+    }
+
+    @PutMapping("/{codigo}")
+    public ConvocatoriaDTO editar(
+            @PathVariable String codigo, @RequestBody ConvocatoriaRequest request,
+            HttpSession sesion) throws IOException {
+        autorizacion.requerirGestionConvocatorias(sesion);
+        return servicio.editar(codigo, request.aComando());
+    }
+
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity<Void> eliminar(
+            @PathVariable String codigo, HttpSession sesion) throws IOException {
+        autorizacion.requerirGestionConvocatorias(sesion);
+        servicio.eliminar(codigo);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{codigo}/confirmacion")
-    public ConvocatoriaDTO confirmar(@PathVariable String codigo) throws IOException {
+    public ConvocatoriaDTO confirmar(
+            @PathVariable String codigo, HttpSession sesion) throws IOException {
+        autorizacion.requerirGestionConvocatorias(sesion);
         return servicio.confirmar(codigo);
     }
 

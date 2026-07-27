@@ -22,7 +22,10 @@ public final class AutorizacionConvocatoriaServicio {
                     RolAcceso.GRADUADO, true),
             "reclutador", new UsuarioAcceso(
                     "reclutador", "reclutador123", "Elena Salazar",
-                    RolAcceso.RECLUTADOR, true)
+                    RolAcceso.RECLUTADOR, true),
+            "jefatura", new UsuarioAcceso(
+                    "jefatura", "jefatura123", "Jefatura de Personal",
+                    RolAcceso.JEFATURA, true)
     );
 
     public SesionDTO iniciar(String usuario, String clave, HttpSession sesion) {
@@ -62,9 +65,21 @@ public final class AutorizacionConvocatoriaServicio {
         }
     }
 
+    public void requerirGestionConvocatorias(HttpSession sesion) {
+        UsuarioAcceso usuario = requerirAutenticado(sesion);
+        boolean autorizado = usuario.getRol() == RolAcceso.JEFATURA
+                || (usuario.getRol() == RolAcceso.RECLUTADOR && usuario.isGraduado());
+        if (!autorizado) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Solo reclutamiento o jefatura puede gestionar convocatorias");
+        }
+    }
+
     private static SesionDTO convertir(UsuarioAcceso usuario) {
         return new SesionDTO(
                 usuario.getUsuario(), usuario.getNombre(), usuario.getRol().name(),
-                usuario.isGraduado(), usuario.getRol() == RolAcceso.RECLUTADOR);
+                usuario.isGraduado(), usuario.getRol() == RolAcceso.RECLUTADOR
+                        || usuario.getRol() == RolAcceso.JEFATURA);
     }
 }

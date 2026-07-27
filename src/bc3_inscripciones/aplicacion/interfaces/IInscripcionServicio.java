@@ -4,7 +4,7 @@ import bc3_inscripciones.aplicacion.dto.InscripcionDTO;
 
 import java.io.IOException;
 import java.util.List;
-import bc3_inscripciones.presentacion.requests.InscripcionRequest;
+import bc3_inscripciones.aplicacion.dto.RegistrarInscripcionComando;
 
 /** Casos de uso disponibles para gestionar inscripciones. */
 public interface IInscripcionServicio {
@@ -12,7 +12,7 @@ public interface IInscripcionServicio {
 
     InscripcionDTO actualizarEstado(long id, String nuevoEstado) throws IOException;
 
-    InscripcionDTO registrar(InscripcionRequest request) throws IOException;
+    InscripcionDTO registrar(RegistrarInscripcionComando comando) throws IOException;
 
     void eliminar(long id) throws IOException;
 }

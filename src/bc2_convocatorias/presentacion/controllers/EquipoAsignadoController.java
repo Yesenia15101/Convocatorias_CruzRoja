@@ -30,7 +30,8 @@ public final class EquipoAsignadoController {
     public ResponseEntity<IntegranteEquipoDTO> agregar(
             @PathVariable String codigo,
             @RequestBody IntegranteEquipoRequest request) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicio.agregar(codigo, request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                servicio.agregar(codigo, request.aComando()));
     }
 
     @DeleteMapping("/{id}")

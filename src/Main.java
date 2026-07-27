@@ -18,7 +18,7 @@ public class Main {
         return new WebMvcConfigurer() {
             @Override
             public void addViewControllers(ViewControllerRegistry registro) {
-                registro.addRedirectViewController("/", "/gestion_inscripciones.html");
+                registro.addRedirectViewController("/", "/main.html");
             }
         };
     }

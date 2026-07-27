@@ -1,10 +1,10 @@
 package bc2_convocatorias.aplicacion.services;
 
 import bc2_convocatorias.aplicacion.dto.IntegranteEquipoDTO;
+import bc2_convocatorias.aplicacion.dto.AgregarIntegranteComando;
 import bc2_convocatorias.dominio.entities.EquipoAsignado;
-import bc2_convocatorias.infraestructura.persistence.ConvocatoriaRepositorioImpl;
-import bc2_convocatorias.infraestructura.persistence.EquipoAsignadoRepositorioImpl;
-import bc2_convocatorias.presentacion.requests.IntegranteEquipoRequest;
+import bc2_convocatorias.dominio.repositories.IConvocatoriaRepositorio;
+import bc2_convocatorias.dominio.repositories.IEquipoAsignadoRepositorio;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,12 +13,12 @@ import java.util.NoSuchElementException;
 
 @Service
 public final class EquipoAsignadoServicioAplicacion {
-    private final EquipoAsignadoRepositorioImpl repositorio;
-    private final ConvocatoriaRepositorioImpl convocatorias;
+    private final IEquipoAsignadoRepositorio repositorio;
+    private final IConvocatoriaRepositorio convocatorias;
 
     public EquipoAsignadoServicioAplicacion(
-            EquipoAsignadoRepositorioImpl repositorio,
-            ConvocatoriaRepositorioImpl convocatorias) {
+            IEquipoAsignadoRepositorio repositorio,
+            IConvocatoriaRepositorio convocatorias) {
         this.repositorio = repositorio;
         this.convocatorias = convocatorias;
     }
@@ -33,16 +33,17 @@ public final class EquipoAsignadoServicioAplicacion {
     }
 
     public IntegranteEquipoDTO agregar(
-            String codigo, IntegranteEquipoRequest request) throws IOException {
+            String codigo, AgregarIntegranteComando comando) throws IOException {
         validarConvocatoria(codigo);
-        EquipoAsignado.Perfil perfil = convertirPerfil(request.perfil());
-        EquipoAsignado.EstadoParticipacion estado = convertirEstado(request.estadoParticipacion());
+        EquipoAsignado.Perfil perfil = convertirPerfil(comando.perfil());
+        EquipoAsignado.EstadoParticipacion estado =
+                convertirEstado(comando.estadoParticipacion());
         List<EquipoAsignado> todos = repositorio.listar();
-        validarMentor(codigo, perfil, request.mentorId(), todos);
+        validarMentor(codigo, perfil, comando.mentorId(), todos);
         long id = todos.stream().mapToLong(EquipoAsignado::getId).max().orElse(0) + 1;
         EquipoAsignado integrante = new EquipoAsignado(
-                id, codigo, request.nombreVoluntario(), perfil,
-                request.habilidadEspecialidad(), estado, request.mentorId());
+                id, codigo, comando.nombreVoluntario(), perfil,
+                comando.habilidadEspecialidad(), estado, comando.mentorId());
         repositorio.agregar(integrante);
         todos = repositorio.listar();
         return convertir(integrante, todos);

@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import bc2_convocatorias.dominio.repositories.IEquipoAsignadoRepositorio;
 
 @Repository
-public final class EquipoAsignadoRepositorioImpl {
+public final class EquipoAsignadoRepositorioImpl implements IEquipoAsignadoRepositorio {
     private final Path archivo = Path.of("resources", "database", "equipos.tsv");
     private final ReentrantReadWriteLock bloqueo = new ReentrantReadWriteLock();
 
@@ -23,6 +24,7 @@ public final class EquipoAsignadoRepositorioImpl {
         }
     }
 
+    @Override
     public List<EquipoAsignado> listar() throws IOException {
         bloqueo.readLock().lock();
         try {
@@ -37,10 +39,12 @@ public final class EquipoAsignadoRepositorioImpl {
         }
     }
 
+    @Override
     public Optional<EquipoAsignado> buscar(long id) throws IOException {
         return listar().stream().filter(i -> i.getId() == id).findFirst();
     }
 
+    @Override
     public void agregar(EquipoAsignado integrante) throws IOException {
         bloqueo.writeLock().lock();
         try {
@@ -52,6 +56,7 @@ public final class EquipoAsignadoRepositorioImpl {
         }
     }
 
+    @Override
     public void eliminar(long id) throws IOException {
         bloqueo.writeLock().lock();
         try {

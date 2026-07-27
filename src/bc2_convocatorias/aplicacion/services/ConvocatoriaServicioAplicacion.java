@@ -3,7 +3,7 @@ package bc2_convocatorias.aplicacion.services;
 import bc2_convocatorias.aplicacion.dto.ConvocatoriaDTO;
 import bc2_convocatorias.aplicacion.interfaces.IConvocatoriaServicio;
 import bc2_convocatorias.dominio.entities.Convocatoria;
-import bc2_convocatorias.infraestructura.persistence.ConvocatoriaRepositorioImpl;
+import bc2_convocatorias.dominio.repositories.IConvocatoriaRepositorio;
 import bc3_inscripciones.dominio.enums.EstadoInscripcion;
 import bc3_inscripciones.dominio.repositories.IInscripcionRepositorio;
 import org.springframework.stereotype.Service;
@@ -12,14 +12,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import bc2_convocatorias.dominio.valueobjects.Horario;
+import bc2_convocatorias.dominio.valueobjects.Ubicacion;
+import bc2_convocatorias.aplicacion.dto.GuardarConvocatoriaComando;
+import java.time.LocalDate;
 
 @Service
 public final class ConvocatoriaServicioAplicacion implements IConvocatoriaServicio {
-    private final ConvocatoriaRepositorioImpl repositorio;
+    private final IConvocatoriaRepositorio repositorio;
     private final IInscripcionRepositorio inscripciones;
 
     public ConvocatoriaServicioAplicacion(
-            ConvocatoriaRepositorioImpl repositorio,
+            IConvocatoriaRepositorio repositorio,
             IInscripcionRepositorio inscripciones) {
         this.repositorio = repositorio;
         this.inscripciones = inscripciones;
@@ -59,6 +62,66 @@ public final class ConvocatoriaServicioAplicacion implements IConvocatoriaServic
         return convertir(convocatoria);
     }
 
+    public ConvocatoriaDTO publicar(GuardarConvocatoriaComando comando) throws IOException {
+        validar(comando, true);
+        Convocatoria convocatoria = new Convocatoria(
+                comando.codigo().trim().toLowerCase().replace(' ', '-'),
+                comando.titulo(), comando.minimoParticipantes(), false,
+                LocalDate.parse(comando.fecha()), new Ubicacion(comando.ubicacion()),
+                Horario.desdeTexto(comando.horaInicio(), comando.horaFin()),
+                comando.requisitos());
+        repositorio.agregar(convocatoria);
+        return convertir(convocatoria);
+    }
+
+    public ConvocatoriaDTO editar(
+            String codigo, GuardarConvocatoriaComando comando) throws IOException {
+        validar(comando, false);
+        Convocatoria convocatoria = buscar(codigo);
+        convocatoria.editar(
+                comando.titulo(), LocalDate.parse(comando.fecha()),
+                new Ubicacion(comando.ubicacion()),
+                Horario.desdeTexto(comando.horaInicio(), comando.horaFin()),
+                comando.requisitos(), comando.minimoParticipantes());
+        repositorio.guardarCambios();
+        return convertir(convocatoria);
+    }
+
+    public void eliminar(String codigo) throws IOException {
+        Convocatoria convocatoria = buscar(codigo);
+        if (convocatoria.isConfirmada()) {
+            throw new IllegalStateException(
+                    "No se puede eliminar una convocatoria confirmada");
+        }
+        if (contarInscritos(codigo) > 0) {
+            throw new IllegalStateException(
+                    "No se puede eliminar porque tiene voluntarios inscritos");
+        }
+        repositorio.eliminar(codigo);
+    }
+
+    public List<ConvocatoriaDTO> filtrarPorPerfil(String perfil) throws IOException {
+        String filtro = perfil == null ? "" : perfil.trim().toLowerCase();
+        return listarVerificacionMinimos().stream()
+                .filter(c -> filtro.isBlank() || c.requisitos().stream()
+                        .anyMatch(r -> r.toLowerCase().contains(filtro)))
+                .toList();
+    }
+
+    private static void validar(GuardarConvocatoriaComando comando, boolean exigirCodigo) {
+        if (comando == null) throw new IllegalArgumentException("Los datos son obligatorios");
+        if (exigirCodigo && (comando.codigo() == null || comando.codigo().isBlank())) {
+            throw new IllegalArgumentException("El código es obligatorio");
+        }
+        if (comando.titulo() == null || comando.titulo().isBlank()
+                || comando.fecha() == null || comando.fecha().isBlank()
+                || comando.ubicacion() == null || comando.ubicacion().isBlank()
+                || comando.horaInicio() == null || comando.horaInicio().isBlank()
+                || comando.horaFin() == null || comando.horaFin().isBlank()) {
+            throw new IllegalArgumentException("Complete todos los campos obligatorios");
+        }
+    }
+
     private Convocatoria buscar(String codigo) {
         return repositorio.buscar(codigo).orElseThrow(
                 () -> new NoSuchElementException("No existe la convocatoria " + codigo));
@@ -93,6 +156,7 @@ public final class ConvocatoriaServicioAplicacion implements IConvocatoriaServic
                         ? convocatoria.getHorario().duracionLegible() : null,
                 convocatoria.tieneHorarioDefinido(),
                 convocatoria.tieneHorarioDefinido()
-                        ? "Horario definido" : "El horario todavía no ha sido definido");
+                        ? "Horario definido" : "El horario todavía no ha sido definido",
+                convocatoria.getRequisitos());
     }
 }

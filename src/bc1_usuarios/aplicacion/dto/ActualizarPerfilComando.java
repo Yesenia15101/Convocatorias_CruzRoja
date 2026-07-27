@@ -2,8 +2,8 @@ package bc1_usuarios.aplicacion.dto;
 
 import java.util.List;
 
-public record VoluntarioDTO(
-        String usuario,
+/** Datos independientes de HTTP necesarios para actualizar un perfil. */
+public record ActualizarPerfilComando(
         String nombre,
         String nivelFormacion,
         String especialidad,

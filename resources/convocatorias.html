@@ -1,86 +1,11 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Horarios de convocatorias</title>
-<style>
-:root{font-family:Arial,sans-serif;color:#303030;background:#f5f5f5}body{margin:0}
-header{background:#d71920;color:#fff;padding:28px 6%}main{width:90%;max-width:1200px;margin:25px auto}
-.panel,.card{background:#fff;border-radius:12px;box-shadow:0 6px 18px #0002}.panel{padding:20px;margin-bottom:22px}
-.login{display:flex;flex-wrap:wrap;gap:10px;align-items:end}label{display:flex;flex-direction:column;gap:5px;font-weight:bold}
-input{padding:10px;border:1px solid #bbb;border-radius:7px}.examples{font-size:13px;background:#f5f5f5;padding:10px}
-.session{display:flex;justify-content:space-between;align-items:center}.hidden{display:none!important}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{overflow:hidden}.card h2{background:#d71920;color:#fff;margin:0;padding:18px;font-size:20px}
-.body{padding:18px}.line{margin:11px 0}.warning{background:#fff1c7;color:#805700;padding:11px;border-radius:7px;font-weight:bold}
-.duration{color:#176b25;font-weight:bold}button{border:0;border-radius:7px;padding:11px 14px;
-background:#d71920;color:#fff;font-weight:bold;cursor:pointer}.card button{width:100%}.secondary{background:#555}
-.role{background:#dceeff;color:#124f86;padding:7px 11px;border-radius:15px;font-weight:bold}
-dialog{border:0;border-radius:14px;box-shadow:0 10px 35px #0005;max-width:580px;width:88%}
-dialog::backdrop{background:#0008}.detail{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.detail div{background:#f6f6f6;padding:12px;border-radius:7px}.detail b{display:block;font-size:12px;color:#666;margin-bottom:6px}
-.editor{margin-top:18px;padding:15px;border:2px solid #d71920;border-radius:9px}.editor .row{display:flex;gap:10px;align-items:end}
-#message{color:#a00;font-weight:bold}
-</style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Convocatorias disponibles</title>
+<style>:root{font-family:Arial,sans-serif;background:#f5f5f5;color:#292929}*{box-sizing:border-box}body{margin:0}header{background:#d71920;color:#fff;padding:25px 6%}header div{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center}a{color:inherit}main{max-width:1100px;margin:25px auto;padding:0 18px}.filter,.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 3px 12px #0001}.filter{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.filter label{flex:1;font-weight:bold}input{width:100%;padding:10px;margin-top:5px;border:1px solid #bbb;border-radius:7px}button{border:0;background:#d71920;color:#fff;padding:11px 15px;border-radius:7px;font-weight:bold}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:20px}.card h2{color:#b51319}.tags span{display:inline-block;background:#eee;padding:5px 8px;margin:3px;border-radius:14px}.status{font-weight:bold;color:#17652b}.warning{color:#905f00}</style><link rel="stylesheet" href="sistema.css">
 </head>
-<body>
-<header><h1>Convocatorias y horarios</h1><p>Acceso para voluntarios inscritos y reclutadores graduados.</p></header>
-<main>
-<section id="loginPanel" class="panel">
- <h2>Iniciar sesión</h2>
- <form id="loginForm" class="login">
-  <label>Usuario<input id="user" required></label>
-  <label>Contraseña<input id="password" type="password" required></label>
-  <button>Ingresar</button>
- </form>
- <p class="examples"><b>Cuentas de demostración:</b><br>
- voluntario / voluntario123 · graduado / graduado123 · reclutador / reclutador123</p>
-</section>
-<section id="sessionPanel" class="panel session hidden">
- <div><b id="sessionName"></b> <span id="sessionRole" class="role"></span></div>
- <button id="logout" class="secondary">Cerrar sesión</button>
-</section>
-<p id="message"></p><section id="cards" class="grid"></section>
-</main>
-<dialog id="modal"><h2 id="detailName"></h2><div id="detail" class="detail"></div>
- <section id="editor" class="editor hidden"><h3>Editar horario — solo reclutador</h3>
-  <div class="row"><label>Inicio<input id="start" type="time"></label>
-  <label>Fin<input id="end" type="time"></label><button id="saveSchedule">Guardar</button></div>
-  <p id="editorMessage"></p>
- </section>
- <button class="secondary" style="margin-top:18px;width:100%" onclick="modal.close()">Cerrar</button>
-</dialog>
-<script>
-const cards=document.getElementById("cards"),modal=document.getElementById("modal");
-let session=null,currentCode=null;
+<body><header><div><div><h1>Convocatorias disponibles</h1><p>Información actualizada de servicios y requisitos</p></div><a href="/main.html" onclick="window.location.replace('/main.html');return false">← Volver directamente al inicio</a></div></header><main>
+<section class="filter"><label>Filtrar según habilidad, especialidad o perfil<input id="profile" placeholder="Ej. primeros auxilios, RCP, comunicación"></label><button id="apply">Filtrar</button><button id="mine">Usar mi perfil</button></section><p id="message"></p><section id="cards" class="grid"></section>
+</main><script>
+async function req(url){const r=await fetch(url);const b=await r.json().catch(()=>({}));if(!r.ok)throw Error(b.detail||b.error||"No se pudo cargar");return b}
 function esc(v){const d=document.createElement("div");d.textContent=v??"";return d.innerHTML}
-function dateLabel(v){if(!v||v==="Fecha por definir")return v;
- return new Intl.DateTimeFormat("es-PE",{dateStyle:"long",timeZone:"UTC"}).format(new Date(v+"T00:00:00Z"))}
-async function request(url,options={}){const r=await fetch(url,{headers:{"Content-Type":"application/json"},...options});
- if(!r.ok){const b=await r.json().catch(()=>({message:"Acceso denegado"}));
-  throw Error(b.detail||b.message||b.error||"Acceso denegado")}return r.status===204?null:r.json()}
-function schedule(c){return c.horarioDefinido?`<div class="line">🕒 ${c.horaInicio} – ${c.horaFinalizacion}</div>
- <div class="line duration">Duración: ${c.duracionTotal}</div>`:`<div class="warning">${esc(c.mensajeHorario)}</div>`}
-async function load(){const calls=await request("/api/convocatorias");cards.innerHTML=calls.map(c=>
- `<article class="card"><h2>${esc(c.nombre)}</h2><div class="body"><div class="line">📅 ${esc(dateLabel(c.fechaServicio))}</div>
- <div class="line">📍 ${esc(c.lugar)}</div>${schedule(c)}<button data-code="${c.codigo}">Ver convocatoria</button>
- </div></article>`).join("");cards.querySelectorAll("button").forEach(b=>b.onclick=()=>show(b.dataset.code))}
-async function show(code){currentCode=code;const c=await request(`/api/convocatorias/${code}`);
- document.getElementById("detailName").textContent=c.nombre;document.getElementById("detail").innerHTML=`
- <div><b>FECHA</b>${esc(dateLabel(c.fechaServicio))}</div><div><b>LUGAR</b>${esc(c.lugar)}</div>
- <div><b>INICIO</b>${esc(c.horaInicio||"No definida")}</div><div><b>FINALIZACIÓN</b>${esc(c.horaFinalizacion||"No definida")}</div>
- <div><b>DURACIÓN</b>${esc(c.duracionTotal||c.mensajeHorario)}</div><div><b>ESTADO</b>${esc(c.estado.replaceAll("_"," "))}</div>`;
- document.getElementById("editor").classList.toggle("hidden",!session.puedeEditarHorarios);
- document.getElementById("start").value=c.horaInicio||"";document.getElementById("end").value=c.horaFinalizacion||"";modal.showModal()}
-function showSession(s){session=s;document.getElementById("loginPanel").classList.add("hidden");
- document.getElementById("sessionPanel").classList.remove("hidden");document.getElementById("sessionName").textContent=s.nombre;
- document.getElementById("sessionRole").textContent=s.rol+(s.rol==="RECLUTADOR"?" · GRADUADO":"");load().catch(error=>message.textContent=error.message)}
-document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();try{showSession(await request("/api/sesion",
- {method:"POST",body:JSON.stringify({usuario:user.value,clave:password.value})}));message.textContent=""}catch(error){message.textContent=error.message}};
-document.getElementById("logout").onclick=async()=>{await request("/api/sesion",{method:"DELETE"});location.reload()};
-document.getElementById("saveSchedule").onclick=async()=>{try{const c=await request(`/api/convocatorias/${currentCode}/horario`,
- {method:"PATCH",body:JSON.stringify({horaInicio:start.value,horaFin:end.value})});
- document.getElementById("editorMessage").textContent=`Guardado: ${c.duracionTotal}`;await load();await show(currentCode)}
- catch(error){document.getElementById("editorMessage").textContent=error.message}};
-request("/api/sesion").then(showSession).catch(()=>{});
+async function load(value=""){const data=await req(`/api/convocatorias/disponibles?perfil=${encodeURIComponent(value)}`);cards.innerHTML=data.length?data.map(c=>`<article class="card"><h2>${esc(c.nombre)}</h2><p>📅 ${c.fechaServicio} · 📍 ${esc(c.lugar)}</p><p>🕒 ${c.horarioDefinido?`${c.horaInicio}–${c.horaFinalizacion} (${c.duracionTotal})`:c.mensajeHorario}</p><div class="tags">${c.requisitos.map(r=>`<span>${esc(r)}</span>`).join("")}</div><p class="${c.minimoAlcanzado?"status":"warning"}">${esc(c.aviso)} · ${c.estado.replaceAll("_"," ")}</p><a href="inscripcion.html?convocatoria=${c.codigo}">Inscribirme</a></article>`).join(""):"No hay convocatorias que coincidan con el perfil.";message.textContent=`${data.length} convocatoria(s) encontrada(s).`}
+apply.onclick=()=>load(profile.value).catch(x=>message.textContent=x.message);mine.onclick=async()=>{try{const p=await req("/api/perfiles/actual");profile.value=p.habilidades[0]||p.especialidad;await load(profile.value)}catch(x){message.textContent="Inicia sesión para usar tu perfil."}};load();
 </script></body></html>

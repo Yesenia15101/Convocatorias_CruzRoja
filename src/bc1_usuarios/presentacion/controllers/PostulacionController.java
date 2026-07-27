@@ -32,7 +32,8 @@ public final class PostulacionController {
     @PostMapping
     public ResponseEntity<PostulacionDTO> registrar(
             @RequestBody PostulacionRequest request) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicio.registrar(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                servicio.registrar(request.aComando()));
     }
 
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})

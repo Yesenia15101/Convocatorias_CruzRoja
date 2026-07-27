@@ -38,7 +38,8 @@ public final class InscripcionController {
     @PostMapping
     public ResponseEntity<InscripcionDTO> registrar(
             @RequestBody InscripcionRequest request) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicio.registrar(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                servicio.registrar(request.aComando()));
     }
 
     @DeleteMapping("/{id}")

@@ -14,10 +14,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import bc2_convocatorias.dominio.repositories.IConvocatoriaRepositorio;
 
 /** Repositorio persistente. La lectura admite la tabla antigua de cuatro columnas. */
 @Repository
-public final class ConvocatoriaRepositorioImpl {
+public final class ConvocatoriaRepositorioImpl implements IConvocatoriaRepositorio {
     private final Map<String, Convocatoria> convocatorias = new LinkedHashMap<>();
     private final Path archivo = Path.of("resources", "database", "convocatorias.tsv");
 
@@ -33,26 +34,28 @@ public final class ConvocatoriaRepositorioImpl {
             if (lineas.get(i).isBlank()) continue;
             String[] c = lineas.get(i).split("\t", -1);
             if (c.length >= 8) {
-                agregar(new Convocatoria(c[0], c[1], Integer.parseInt(c[2]),
+                agregarEnMemoria(new Convocatoria(c[0], c[1], Integer.parseInt(c[2]),
                         Boolean.parseBoolean(c[3]), fecha(c[4]), new Ubicacion(c[5]),
-                        horario(c[6], c[7])));
+                        horario(c[6], c[7]), c.length >= 9
+                                ? requisitos(c[8]) : List.of("Disponibilidad")));
             } else {
-                agregar(enriquecerDatosAntiguos(
+                agregarEnMemoria(enriquecerDatosAntiguos(
                         c[0], c[1], Integer.parseInt(c[2]), Boolean.parseBoolean(c[3])));
             }
         }
     }
 
     private void cargarDatosIniciales() {
-        agregar(crear("donacion", "Campaña de Donación de Sangre", 3,
+        agregarEnMemoria(crear("donacion", "Campaña de Donación de Sangre", 3,
                 "2026-07-25", "Arequipa - Cercado", "08:00", "14:00"));
-        agregar(crear("emergencias", "Apoyo en Emergencias", 2,
+        agregarEnMemoria(crear("emergencias", "Apoyo en Emergencias", 2,
                 "2026-07-28", "Camaná", "07:30", "17:00"));
-        agregar(crear("auxilios", "Capacitación en Primeros Auxilios", 2,
+        agregarEnMemoria(crear("auxilios", "Capacitación en Primeros Auxilios", 2,
                 "2026-07-30", "Yanahuara", "09:00", "13:00"));
-        agregar(new Convocatoria("medica", "Campaña Médica Comunitaria", 3,
+        agregarEnMemoria(new Convocatoria("medica", "Campaña Médica Comunitaria", 3,
                 false, LocalDate.parse("2026-08-05"),
-                new Ubicacion("Cerro Colorado"), null));
+                new Ubicacion("Cerro Colorado"), null,
+                List.of("Formación en salud", "Disponibilidad de campo")));
     }
 
     private Convocatoria enriquecerDatosAntiguos(
@@ -79,7 +82,8 @@ public final class ConvocatoriaRepositorioImpl {
             String codigo, String nombre, int minimo, boolean confirmada,
             String fecha, String lugar, String inicio, String fin) {
         return new Convocatoria(codigo, nombre, minimo, confirmada,
-                LocalDate.parse(fecha), new Ubicacion(lugar), Horario.desdeTexto(inicio, fin));
+                LocalDate.parse(fecha), new Ubicacion(lugar), Horario.desdeTexto(inicio, fin),
+                requisitosPorCodigo(codigo));
     }
 
     private static LocalDate fecha(String valor) {
@@ -90,26 +94,62 @@ public final class ConvocatoriaRepositorioImpl {
         return inicio.isBlank() || fin.isBlank() ? null : Horario.desdeTexto(inicio, fin);
     }
 
-    private void agregar(Convocatoria convocatoria) {
+    private static List<String> requisitos(String texto) {
+        if (texto == null || texto.isBlank()) return List.of("Disponibilidad");
+        return java.util.Arrays.stream(texto.split("\\|"))
+                .map(String::trim).filter(v -> !v.isBlank()).toList();
+    }
+
+    private static List<String> requisitosPorCodigo(String codigo) {
+        return switch (codigo) {
+            case "donacion" -> List.of("Atención al público", "Trabajo en equipo");
+            case "emergencias" -> List.of("Primeros auxilios", "Disponibilidad inmediata");
+            case "auxilios" -> List.of("RCP", "Comunicación");
+            default -> List.of("Disponibilidad");
+        };
+    }
+
+    private void agregarEnMemoria(Convocatoria convocatoria) {
         convocatorias.put(convocatoria.getCodigo(), convocatoria);
     }
 
+    @Override
     public List<Convocatoria> listar() { return List.copyOf(convocatorias.values()); }
+    @Override
     public Optional<Convocatoria> buscar(String codigo) {
         return Optional.ofNullable(convocatorias.get(codigo));
     }
 
+    @Override
+    public void agregar(Convocatoria convocatoria) throws IOException {
+        if (convocatorias.containsKey(convocatoria.getCodigo())) {
+            throw new IllegalStateException("Ya existe una convocatoria con ese código");
+        }
+        agregarEnMemoria(convocatoria);
+        guardarCambios();
+    }
+
+    @Override
+    public void eliminar(String codigo) throws IOException {
+        if (convocatorias.remove(codigo) == null) {
+            throw new IllegalArgumentException("No existe la convocatoria " + codigo);
+        }
+        guardarCambios();
+    }
+
+    @Override
     public void guardarCambios() throws IOException {
         Files.createDirectories(archivo.getParent());
         List<String> lineas = new java.util.ArrayList<>();
-        lineas.add("codigo\tnombre\tminimoParticipantes\tconfirmada\tfecha\tlugar\thoraInicio\thoraFin");
+        lineas.add("codigo\tnombre\tminimoParticipantes\tconfirmada\tfecha\tlugar\thoraInicio\thoraFin\trequisitos");
         for (Convocatoria c : convocatorias.values()) {
             lineas.add(String.join("\t", c.getCodigo(), c.getNombre(),
                     Integer.toString(c.getMinimoParticipantes()), Boolean.toString(c.isConfirmada()),
                     c.getFechaServicio() == null ? "" : c.getFechaServicio().toString(),
                     c.getUbicacion().lugar(),
                     c.tieneHorarioDefinido() ? c.getHorario().getHoraInicioTexto() : "",
-                    c.tieneHorarioDefinido() ? c.getHorario().getHoraFinTexto() : ""));
+                    c.tieneHorarioDefinido() ? c.getHorario().getHoraFinTexto() : "",
+                    String.join("|", c.getRequisitos())));
         }
         Files.write(archivo, lineas, StandardCharsets.UTF_8);
     }

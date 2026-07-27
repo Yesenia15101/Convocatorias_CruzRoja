@@ -8,12 +8,13 @@ import java.time.LocalDate;
 /** Convocatoria con la regla de cantidad mínima de participantes. */
 public final class Convocatoria {
     private final String codigo;
-    private final String nombre;
+    private String nombre;
     private int minimoParticipantes;
     private boolean confirmada;
-    private final LocalDate fechaServicio;
-    private final Ubicacion ubicacion;
+    private LocalDate fechaServicio;
+    private Ubicacion ubicacion;
     private Horario horario;
+    private java.util.List<String> requisitos;
 
     public Convocatoria(String codigo, String nombre, int minimoParticipantes) {
         this(codigo, nombre, minimoParticipantes, false);
@@ -22,12 +23,20 @@ public final class Convocatoria {
     public Convocatoria(
             String codigo, String nombre, int minimoParticipantes, boolean confirmada) {
         this(codigo, nombre, minimoParticipantes, confirmada, null,
-                new Ubicacion("Lugar por definir"), null);
+                new Ubicacion("Lugar por definir"), null, java.util.List.of("Disponibilidad"));
     }
 
     public Convocatoria(
             String codigo, String nombre, int minimoParticipantes, boolean confirmada,
             LocalDate fechaServicio, Ubicacion ubicacion, Horario horario) {
+        this(codigo, nombre, minimoParticipantes, confirmada, fechaServicio,
+                ubicacion, horario, java.util.List.of("Disponibilidad"));
+    }
+
+    public Convocatoria(
+            String codigo, String nombre, int minimoParticipantes, boolean confirmada,
+            LocalDate fechaServicio, Ubicacion ubicacion, Horario horario,
+            java.util.List<String> requisitos) {
         this.codigo = validarTexto(codigo, "código");
         this.nombre = validarTexto(nombre, "nombre");
         definirMinimo(minimoParticipantes);
@@ -35,6 +44,7 @@ public final class Convocatoria {
         this.fechaServicio = fechaServicio;
         this.ubicacion = java.util.Objects.requireNonNull(ubicacion);
         this.horario = horario;
+        this.requisitos = validarRequisitos(requisitos);
     }
 
     public void definirMinimo(int minimo) {
@@ -72,6 +82,33 @@ public final class Convocatoria {
                 nuevoHorario, "El horario es obligatorio");
     }
 
+    public void editar(
+            String nuevoNombre, LocalDate nuevaFecha, Ubicacion nuevaUbicacion,
+            Horario nuevoHorario, java.util.List<String> nuevosRequisitos, int nuevoMinimo) {
+        // Cualquier cambio relevante requiere una nueva confirmación de jefatura.
+        confirmada = false;
+        nombre = validarTexto(nuevoNombre, "título");
+        fechaServicio = java.util.Objects.requireNonNull(
+                nuevaFecha, "La fecha es obligatoria");
+        ubicacion = java.util.Objects.requireNonNull(
+                nuevaUbicacion, "La ubicación es obligatoria");
+        horario = java.util.Objects.requireNonNull(
+                nuevoHorario, "El horario es obligatorio");
+        requisitos = validarRequisitos(nuevosRequisitos);
+        definirMinimo(nuevoMinimo);
+    }
+
+    private static java.util.List<String> validarRequisitos(java.util.List<String> valores) {
+        if (valores == null) throw new IllegalArgumentException("Los requisitos son obligatorios");
+        java.util.List<String> limpios = valores.stream()
+                .filter(java.util.Objects::nonNull).map(String::trim)
+                .filter(v -> !v.isBlank()).toList();
+        if (limpios.isEmpty()) {
+            throw new IllegalArgumentException("Debe registrar al menos un requisito");
+        }
+        return java.util.List.copyOf(limpios);
+    }
+
     private static String validarTexto(String valor, String campo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException("El " + campo + " es obligatorio");
@@ -87,4 +124,5 @@ public final class Convocatoria {
     public Ubicacion getUbicacion() { return ubicacion; }
     public Horario getHorario() { return horario; }
     public boolean tieneHorarioDefinido() { return horario != null; }
+    public java.util.List<String> getRequisitos() { return requisitos; }
 }

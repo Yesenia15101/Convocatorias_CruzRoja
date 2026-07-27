@@ -8,4 +8,10 @@ public record PostulacionRequest(
         String habilidades,
         String disponibilidad,
         String codigoConvocatoria) {
+
+    public bc1_usuarios.aplicacion.dto.RegistrarPostulacionComando aComando() {
+        return new bc1_usuarios.aplicacion.dto.RegistrarPostulacionComando(
+                dni, nombreCompleto, nivelFormacion, especialidad,
+                habilidades, disponibilidad, codigoConvocatoria);
+    }
 }
