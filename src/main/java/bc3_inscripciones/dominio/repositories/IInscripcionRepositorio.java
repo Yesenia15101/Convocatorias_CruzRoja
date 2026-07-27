@@ -49,8 +49,8 @@ public interface IInscripcionRepositorio {
 
     /**
      * Cuenta las inscripciones activas (no rechazadas) de una convocatoria.
-     * Usado por BC2 (Convocatorias) para calcular si se alcanzó el mínimo
-     * de participantes, a través del puerto IConteoInscritosProveedor.
+     * Usado para comparar contra el mínimo de participantes requerido y
+     * contra el número máximo de vacantes (ver InscripcionFabrica).
      */
     long contarActivasPorConvocatoria(Long convocatoriaId);
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,16 +12,6 @@ import bc3_inscripciones.dominio.entities.Inscripcion;
 import bc3_inscripciones.dominio.enums.EstadoInscripcion;
 import bc3_inscripciones.dominio.repositories.IInscripcionRepositorio;
 
-/**
- * Implementación de infraestructura del repositorio de inscripciones.
- *
- * Por ahora persiste en memoria (Map) para no acoplar el dominio a un
- * motor de base de datos concreto todavía; cuando se conecte JPA/JDBC
- * (ver resources/database/schema.sql) solo se reemplaza esta clase,
- * sin tocar dominio ni aplicación (Open/Closed Principle).
- *
- * @author Natalie Marleny Lazo Paxi
- */
 @Repository
 public class InscripcionRepositorioImpl implements IInscripcionRepositorio {
 
@@ -49,7 +38,7 @@ public class InscripcionRepositorioImpl implements IInscripcionRepositorio {
     public List<Inscripcion> listarPorDni(String dniVoluntario) {
         return almacen.values().stream()
                 .filter(inscripcion -> inscripcion.getDniVoluntario().equals(dniVoluntario))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -57,16 +46,24 @@ public class InscripcionRepositorioImpl implements IInscripcionRepositorio {
         return almacen.values().stream()
                 .anyMatch(inscripcion ->
                         inscripcion.getDniVoluntario().equals(dniVoluntario)
-                        && inscripcion.getConvocatoriaId().equals(convocatoriaId)
-                        && inscripcion.getEstado() != EstadoInscripcion.RECHAZADA);
+                        && esActivaEnConvocatoria(inscripcion, convocatoriaId));
     }
 
     @Override
     public long contarActivasPorConvocatoria(Long convocatoriaId) {
         return almacen.values().stream()
-                .filter(inscripcion ->
-                        inscripcion.getConvocatoriaId().equals(convocatoriaId)
-                        && inscripcion.getEstado() != EstadoInscripcion.RECHAZADA)
+                .filter(inscripcion -> esActivaEnConvocatoria(inscripcion, convocatoriaId))
                 .count();
+    }
+
+    /**
+     * Una inscripción cuenta como "activa" en una convocatoria cuando
+     * pertenece a esa convocatoria y no fue rechazada. Centralizado aquí
+     * para que existeInscripcionActiva y contarActivasPorConvocatoria no
+     * dupliquen la misma condición (principio DRY).
+     */
+    private boolean esActivaEnConvocatoria(Inscripcion inscripcion, Long convocatoriaId) {
+        return inscripcion.getConvocatoriaId().equals(convocatoriaId)
+                && inscripcion.getEstado() != EstadoInscripcion.RECHAZADA;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bc3_inscripciones.aplicacion.dto.InscripcionDTO;
 import bc3_inscripciones.aplicacion.interfaces.IInscripcionServicio;
 import bc3_inscripciones.dominio.factories.InscripcionDuplicadaException;
+import bc3_inscripciones.dominio.factories.VacantesAgotadasException;
 import bc3_inscripciones.presentacion.requests.InscripcionRequest;
 
 /**
@@ -104,6 +105,14 @@ public class InscripcionController {
      */
     @ExceptionHandler(InscripcionDuplicadaException.class)
     public ResponseEntity<String> manejarInscripcionDuplicada(InscripcionDuplicadaException excepcion) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(excepcion.getMessage());
+    }
+
+    /**
+     * Traduce la regla de negocio "vacantes agotadas" a HTTP 409 (Conflict).
+     */
+    @ExceptionHandler(VacantesAgotadasException.class)
+    public ResponseEntity<String> manejarVacantesAgotadas(VacantesAgotadasException excepcion) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(excepcion.getMessage());
     }
 

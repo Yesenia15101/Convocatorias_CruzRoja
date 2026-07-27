@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
         "app",
-        "bc1_usuarios",
-        "bc2_convocatorias",
+        //"bc1_usuarios",
+        //"bc2_convocatorias",
         "bc3_inscripciones"
 })
 public class Main {

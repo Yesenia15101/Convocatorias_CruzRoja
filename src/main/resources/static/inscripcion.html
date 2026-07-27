@@ -362,7 +362,7 @@
 
       <div class="detalle">
 
-        <h3 id="detalleTitulo"></h3>
+        <h3 id="detalleTitulo">detalle</h3>
         <p class="descripcion" id="detalleDescripcion"></p>
 
         <div class="detalle-datos">
@@ -386,8 +386,9 @@
         </p>
 
         <div class="campo">
-          <label>DNI del voluntario</label>
+          <label>DNI del voluntario
           <input type="text" id="inputDni" placeholder="Ej. 12345678" maxlength="8">
+          </label>
         </div>
 
         <p class="aviso" id="avisoRequisitos">Debes marcar todos los requisitos antes de inscribirte.</p>
@@ -407,25 +408,10 @@
     <p>Cruz Roja Peruana - Filial Arequipa</p>
     <p>Urb. Municipal Calle Castilla Nro. 162, Cercado, Arequipa</p>
     <p>Teléfono: (054) 204343 / 997 677 728 &nbsp; | &nbsp; secretaria@cruzrojaarequipa.org</p>
-    <p><a href="https://www.cruzrojaarequipa.org.pe/">Volver al inicio</a></p>
+    <p><a href="main.html">Volver al inicio</a></p>
   </div>
 
-  <!-- ===================== SCRIPT ===================== -->
-  <!--
-    NOTA DE ARQUITECTURA:
-    Este archivo (inscripcion.html) es solo la VISTA. No debe contener
-    reglas de negocio ni acceso a datos. Toda esa lógica vive en el
-    backend Java, dentro del Bounded Context bc3_inscripciones:
-
-      fetch() en este HTML
-        -> InscripcionController      (presentacion)  HTTP <-> DTO
-        -> InscripcionServicioAplicacion (aplicacion)  caso de uso
-        -> Inscripcion / InscripcionFabrica (dominio)  reglas de negocio
-        -> IInscripcionRepositorio / Impl (infraestructura) persistencia
-
-    Aquí solo llamamos a los endpoints REST expuestos por
-    InscripcionController: POST/GET/PATCH /api/inscripciones/**
-  -->
+  
   <script>
 
     const URL_BASE_API = "/api/inscripciones";
@@ -480,14 +466,12 @@
 
     let convocatoriaSeleccionada = null;
 
-
-
       // 2. MOSTRAR LA LISTA DE CONVOCATORIAS
 
 
     function mostrarListaConvocatorias() {
       const contenedorLista = document.getElementById("listaConvocatorias");
-      contenedorLista.innerHTML = ""; // limpiamos antes de dibujar
+      contenedorLista.innerHTML = ""; 
 
       convocatorias.forEach(function (convocatoria) {
         const tarjeta = document.createElement("div");
@@ -506,16 +490,7 @@
     }
 
 
-    /* =================================================================
-       3. MOSTRAR EL DETALLE DE UNA CONVOCATORIA
-    ================================================================= */
-
-    /* =================================================================
-       2.1 ESTADO DEL MÍNIMO DE PARTICIPANTES
-          cantidadMinima vive aquí en el HTML (igual que "vacantes");
-          el conteo real de inscritos sí viene del backend, para que
-          sea el mismo número para todos los voluntarios.
-    ================================================================= */
+       //2.1 ESTADO DEL MÍNIMO DE PARTICIPANTES
 
     async function actualizarEstadoMinimoParticipantes(convocatoria) {
       const contenedorAviso = document.getElementById("avisoMinimoParticipantes");
@@ -551,6 +526,10 @@
       }
     }
 
+    /* =================================================================
+       3. MOSTRAR EL DETALLE DE UNA CONVOCATORIA
+    ================================================================= */
+
     function verDetalle(id) {
       // Buscamos la convocatoria seleccionada por su id
       convocatoriaSeleccionada = convocatorias.find(function (c) {
@@ -582,7 +561,10 @@
       document.getElementById("avisoDni").style.display = "none";
       document.getElementById("mensajeConfirmacion").style.display = "none";
       document.getElementById("inputDni").value = "";
-      document.getElementById("btnInscribirme").disabled = false;
+      actualizarDisponibilidadBoton(convocatoriaSeleccionada);
+      if (!hayVacantesDisponibles(convocatoriaSeleccionada)) {
+        mostrarAviso("avisoDni", "Esta convocatoria ya no tiene vacantes disponibles.");
+      }
 
       // Cambiamos de vista:
       document.getElementById("vista-lista").classList.add("oculto");
@@ -592,10 +574,7 @@
       actualizarEstadoMinimoParticipantes(convocatoriaSeleccionada);
     }
 
-
-    /* =================================================================
-       4. VOLVER A LA LISTA
-    ================================================================= */
+      // 4. VOLVER A LA LISTA
 
     document.getElementById("btnVolver").addEventListener("click", function () {
       document.getElementById("vista-detalle").classList.add("oculto");
@@ -604,9 +583,8 @@
     });
 
 
-    /* =================================================================
-       5. VERIFICAR REQUISITOS DEL VOLUNTARIO
-    ================================================================= */
+      // 5. VERIFICAR REQUISITOS DEL VOLUNTARIO
+
 
     function todosLosRequisitosEstanMarcados() {
       const casillasRequisitos = document.querySelectorAll("#listaRequisitos input[type='checkbox']");
@@ -670,11 +648,20 @@
       return respuesta.json(); // InscripcionDTO
     }
 
+    /* =================================================================
+       7.1 DISPONIBILIDAD DE VACANTES
+    ================================================================= */
+
+    function hayVacantesDisponibles(convocatoria) {
+      return convocatoria.vacantes > 0;
+    }
+
+    function actualizarDisponibilidadBoton(convocatoria) {
+      document.getElementById("btnInscribirme").disabled = !hayVacantesDisponibles(convocatoria);
+    }
+
     function descontarVacante(convocatoria) {
-      // NOTA: esto solo actualiza el número en memoria del navegador.
-      // No se persiste en el backend porque bc2_convocatorias (que
-      // debería dueño de "vacantes") todavía no está implementado.
-      // Al recargar la página, vuelve al valor original.
+
       if (convocatoria.vacantes > 0) {
         convocatoria.vacantes -= 1;
       }
@@ -696,6 +683,12 @@
 
     document.getElementById("btnInscribirme").addEventListener("click", async function () {
       ocultarAvisos();
+
+      if (!hayVacantesDisponibles(convocatoriaSeleccionada)) {
+        mostrarAviso("avisoDni", "Esta convocatoria ya no tiene vacantes disponibles.");
+        actualizarDisponibilidadBoton(convocatoriaSeleccionada);
+        return;
+      }
 
       if (!todosLosRequisitosEstanMarcados()) {
         mostrarAviso("avisoRequisitos");
@@ -720,7 +713,7 @@
         mostrarInscripcionExitosa(inscripcionCreada);
       } catch (error) {
         mostrarAviso("avisoDni", error.message);
-        botonInscribirme.disabled = false;
+        actualizarDisponibilidadBoton(convocatoriaSeleccionada);
       }
     });
 
