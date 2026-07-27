@@ -1,0 +1,32 @@
+target/
+out/
+.idea/
+*.iml
+.mvn/wrapper/maven-wrapper.jar
+
+# Spring Tool Suite
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# IntelliJ IDEA
+*.iws
+*.ipr
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+# Visual Studio Code
+.vscode/
+
+# Tablas locales generadas por la aplicación
+resources/database/*.tsv
