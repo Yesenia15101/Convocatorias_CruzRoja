@@ -101,23 +101,13 @@ Ejecutar la aplicación
 
 mvn spring-boot:run
 
----
-
-🎯 Objetivos del proyecto
-
-- Aplicar principios de Domain Driven Design.
-- Implementar separación de responsabilidades.
-- Diseñar un sistema mantenible y escalable.
-- Modelar correctamente los procesos de negocio de la Cruz Roja Peruana.
-
----
 
 👥 Autores
 
-Proyecto académico desarrollado para la gestión de la Cruz Roja Peruana Filial Arequipa.
+- Lazo Paxi, Natalie Marleny
+- Quispe Chavez, Sharmely Yesenia
+- Quispe Lloccallasi, David Augusto
+- Uribe Zuñiga, Micaela Belén
+- Tito Vilca, Lizeth Angelica
+- Zenayuca Corimanya, Katherin Milagros
 
----
-
-📄 Licencia
-
-Este proyecto fue desarrollado con fines académicos y educativos.
