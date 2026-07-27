@@ -1,16 +1,32 @@
-# Archivos de compilación
 target/
-*.class
-
-# IDEs y Editores
+out/
 .idea/
 *.iml
-.vscode/
-.settings/
-.project/
-.classpath/
+.mvn/wrapper/maven-wrapper.jar
 
-# Logs y SO
-*.log
-.DS_Store
-Thumbs.db
+# Spring Tool Suite
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# IntelliJ IDEA
+*.iws
+*.ipr
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+# Visual Studio Code
+.vscode/
+
+# Tablas locales generadas por la aplicación
+resources/database/*.tsv

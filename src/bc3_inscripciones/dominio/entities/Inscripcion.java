@@ -1,72 +1,119 @@
 package bc3_inscripciones.dominio.entities;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
 import bc3_inscripciones.dominio.enums.EstadoInscripcion;
 
-/**
- * Entidad del dominio que representa la inscripción de un voluntario
- * a una convocatoria (BC3 - Inscripciones).
- *
- * Convenciones aplicadas (Java Code Conventions, Oracle):
- * - Clase en PascalCase, atributos y métodos en camelCase.
- * - Atributos privados con acceso por getters (encapsulamiento).
- * - Un import por línea; sin imports comodín.
- * - Identidad de entidad definida por su id (equals/hashCode).
- *
- * @author Natalie Marleny Lazo Paxi
- */
-public class Inscripcion {
+import java.time.LocalDate;
+import java.util.Objects;
 
-    private Long id;
-    private String dniVoluntario;
-    private Long convocatoriaId;
-    private LocalDateTime fechaInscripcion;
+/** Entidad del dominio BC3 que representa una inscripción. */
+public final class Inscripcion {
+    private final long id;
+    private final String nombre;
+    private final String dni;
+    private final String correo;
+    private final String telefono;
+    private final String convocatoria;
+    private final String codigoConvocatoria;
+    private final LocalDate fechaInscripcion;
+    private final String experiencia;
     private EstadoInscripcion estado;
 
-    public Inscripcion(Long id, String dniVoluntario, Long convocatoriaId) {
+    public Inscripcion(
+            long id,
+            String nombre,
+            String dni,
+            String correo,
+            String telefono,
+            String convocatoria,
+            String codigoConvocatoria,
+            LocalDate fechaInscripcion,
+            EstadoInscripcion estado,
+            String experiencia) {
+
+        if (id <= 0) {
+            throw new IllegalArgumentException("El identificador debe ser mayor que cero");
+        }
+
         this.id = id;
-        this.dniVoluntario = dniVoluntario;
-        this.convocatoriaId = convocatoriaId;
-        this.fechaInscripcion = LocalDateTime.now(ZoneId.systemDefault());
-        this.estado = EstadoInscripcion.PENDIENTE;
+        this.nombre = validarTexto(nombre, "nombre");
+        this.dni = validarDni(dni);
+        this.correo = validarCorreo(correo);
+        this.telefono = validarTexto(telefono, "teléfono");
+        this.convocatoria = validarTexto(convocatoria, "convocatoria");
+        this.codigoConvocatoria = validarTexto(codigoConvocatoria, "código de convocatoria");
+        this.fechaInscripcion = Objects.requireNonNull(
+                fechaInscripcion,
+                "La fecha de inscripción es obligatoria"
+        );
+        this.estado = Objects.requireNonNull(estado, "El estado es obligatorio");
+        this.experiencia = experiencia == null ? "" : experiencia.trim();
     }
 
-    /**
-     * Confirma la inscripción cuando la convocatoria alcanza
-     * el mínimo de participantes (regla de negocio HF.2.3.1).
-     */
-    public void confirmar() {
-        this.estado = EstadoInscripcion.CONFIRMADA;
+    public void cambiarEstado(EstadoInscripcion nuevoEstado) {
+        estado = Objects.requireNonNull(nuevoEstado, "El nuevo estado es obligatorio");
     }
 
-    /**
-     * Rechaza la inscripción cuando el voluntario no cumple
-     * los requisitos de la convocatoria.
-     */
-    public void rechazar() {
-        this.estado = EstadoInscripcion.RECHAZADA;
+    private static String validarTexto(String valor, String campo) {
+        if (valor == null || valor.isBlank()) {
+            throw new IllegalArgumentException("El campo " + campo + " es obligatorio");
+        }
+        return valor.trim();
     }
 
-    public Long getId() {
+    private static String validarDni(String valor) {
+        String dniValidado = validarTexto(valor, "DNI");
+        if (!dniValidado.matches("\\d{8}")) {
+            throw new IllegalArgumentException("El DNI debe contener exactamente 8 dígitos");
+        }
+        return dniValidado;
+    }
+
+    private static String validarCorreo(String valor) {
+        String correoValidado = validarTexto(valor, "correo");
+        if (!correoValidado.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            throw new IllegalArgumentException("El correo no tiene un formato válido");
+        }
+        return correoValidado;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public String getDniVoluntario() {
-        return dniVoluntario;
+    public String getNombre() {
+        return nombre;
     }
 
-    public Long getConvocatoriaId() {
-        return convocatoriaId;
+    public String getDni() {
+        return dni;
     }
 
-    public LocalDateTime getFechaInscripcion() {
+    public String getCorreo() {
+        return correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public String getConvocatoria() {
+        return convocatoria;
+    }
+
+    public String getCodigoConvocatoria() {
+        return codigoConvocatoria;
+    }
+
+    public LocalDate getFechaInscripcion() {
         return fechaInscripcion;
     }
 
     public EstadoInscripcion getEstado() {
         return estado;
+    }
+
+    public String getExperiencia() {
+        return experiencia;
     }
 
     @Override
@@ -78,11 +125,11 @@ public class Inscripcion {
             return false;
         }
         Inscripcion otraInscripcion = (Inscripcion) otro;
-        return Objects.equals(id, otraInscripcion.id);
+        return id == otraInscripcion.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Long.hashCode(id);
     }
 }
