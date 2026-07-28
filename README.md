@@ -117,6 +117,19 @@ mvn spring-boot:run
 Proyecto académico desarrollado para la gestión de la Cruz Roja Peruana Filial Arequipa.
 
 ---
+Funcionalidades
+
+| ID       | Feature                                                        | Prioridad     |
+|----------|-----------------------------------------------------------------|---------------|
+| RF.1     | Gestión de Convocatorias (publicar, editar/eliminar)             | Alta          |
+| RF.2     | Gestión de Participantes (registrar, filtrar, verificar mínimo)  | Alta          |
+| RF.3     | Gestión de Inscripciones (inscribir, ver estado, convocatorias por perfil) | Alta |
+| RF.4     | Gestión de Perfil (perfil, equipo a cargo)                       | Media         |
+| RF.5     | Gestión de Agendas (horarios, estado de convocatoria)             | Alta / Media  |
+| RNF.1.1  | Login seguro                                                      | Alta          |
+| RNF.1.2  | Tiempo de actualización < 5 min                                   | Media         |
+
+Prototipo / GUI
 
 📄 Licencia
 
