@@ -134,6 +134,7 @@ Vistas implementadas (HTML + CSS + JS): main.html , convocatorias.html ,
 inscripcion.html , estado_inscripcion.html , gestion_inscripciones.html ,
 perfil_voluntario.html .
 El main.html corresponde a la página de inicio que podrán visualizar los voluntarios:
+<img src="docs/Homepage.png" width="700" alt="Arquitectura">
 
 
 📄 Licencia
